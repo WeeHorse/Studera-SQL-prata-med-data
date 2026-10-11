@@ -19,9 +19,9 @@
 
 ## III. Att skapa och förändra data
 12. Att skapa tabeller
-13. Att lägga till och förändra data
-14. Nycklar och begränsningar
-15. Datamodellering och normalisering
+13. Nycklar och relationer
+14. Datamodellering och normalisering
+15. Att lägga till och förändra data
 16. Att förändra databasens struktur
 
 ## IV. Mer avancerad SQL
