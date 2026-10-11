@@ -308,15 +308,17 @@ Det är två olika sätt att tolka informationen.
 
 ### Subquery, JOIN eller CTE?
 
-Flera SQL-konstruktioner kan ibland beskriva samma resultat.
+Flera SQL-konstruktioner kan ibland beskriva samma informationsbehov, men de är inte alltid utbytbara utan att resultatet förändras.
 
-En `JOIN` passar ofta bra när vi vill visa information från flera relaterade tabeller.
+**När vi vill kombinera information från flera tabeller är `JOIN` ofta det naturliga förstahandsvalet.**
 
-En subquery passar ofta bra när vi behöver ett beräknat värde, en mängd värden eller ett existensvillkor som en del av en annan fråga.
+När vi i stället vill undersöka om en relation finns passar `EXISTS` eller `IN` ofta bättre. En `JOIN` kan ge flera resultatrader för samma kund om kunden har flera adresser, medan `EXISTS` bara testar om minst en matchning finns. En skalär subquery är också ett naturligt val när vi vill jämföra med exempelvis ett genomsnittspris.
+
+Det finns ingen allmän regel om att subqueries är långsammare än `JOIN`. Moderna databashanterare kan ofta omvandla och optimera olika skrivsätt till liknande exekveringsplaner. När prestandan verkligen spelar roll bör vi undersöka frågans exekveringsplan, exempelvis med `EXPLAIN`, i stället för att dra slutsatser från syntaxen.
+
+**Vår tumregel:** Välj i första hand den konstruktion som tydligast uttrycker vad varje rad i resultatet ska betyda. Använd gärna `JOIN` för att kombinera data och `EXISTS` eller `IN` för att pröva förekomsten av relaterade värden.
 
 Senare kommer vi också att arbeta med `WITH` och så kallade **CTE:er** (*Common Table Expressions*). De låter oss namnge mellanresultat och strukturera större frågor.
-
-Det är inte säkert att en subquery är snabbare eller långsammare än motsvarande `JOIN`. Databashanteraren kan ofta skriva om och optimera frågorna. Läsbarhet, tydlig avsikt och den faktiska exekveringsplanen är bättre utgångspunkter än en allmän regel om vilken syntax som är snabbast.
 
 ### Att bygga en fråga av andra frågor
 
