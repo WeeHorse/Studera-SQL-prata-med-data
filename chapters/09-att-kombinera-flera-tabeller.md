@@ -310,7 +310,7 @@ Stödet varierar mellan databassystem. Till exempel har MySQL inget inbyggt `FUL
 
 ### Från relationer till en ny modell av informationen
 
-När vi skriver en fråga som:
+När vi skriver en Query som:
 
 ```sql
 SELECT
