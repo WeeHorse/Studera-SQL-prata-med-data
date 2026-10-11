@@ -45,7 +45,7 @@ INNER JOIN product_types AS t
     ON p.product_type_id = t.id;
 ```
 
-Queryn fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
+denna Query fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
 
 Då kan vi skapa en View:
 
@@ -62,7 +62,7 @@ INNER JOIN product_types AS t
     ON p.product_type_id = t.id;
 ```
 
-Nu har vi gett Queryn namnet `product_overview`.
+Nu har vi gett denna Query namnet `product_overview`.
 
 ### Att använda en View
 
