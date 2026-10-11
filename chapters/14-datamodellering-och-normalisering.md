@@ -282,7 +282,33 @@ Det innebär att den vanliga minnesregeln om ”beroende av nyckeln och inget an
 
 **Fjärde normalformen (4NF)** tar upp situationer där flera *oberoende flervärdesfakta* lagras tillsammans. Anta exempelvis att en produkt kan ha flera författare och samtidigt finnas i flera språkversioner, och att relationerna är oberoende av varandra. Om vi lagrar alla kombinationer av författare och språk i en enda tabell kan vi skapa onödig upprepning. Då kan separata relationer vara bättre.
 
-**Femte normalformen (5NF)** handlar om mer sammansatta *joinberoenden*: om en relation kan delas upp i flera mindre relationer utan att information går förlorad eller felaktiga kombinationer uppstår.
+**Femte normalformen (5NF)** handlar om relationer där **tre eller fler samband tillsammans** avgör vilka kombinationer som är giltiga.
+
+Föreställ dig att bokhandeln har flera butiker och leverantörer. Vi vill beskriva vilka leverantörer som kan leverera vilka produkter till vilka butiker. Vi börjar med en tabell:
+
+| supplier_id | product_id | store_id |
+|---|---|---|
+| 1 | 10 | 1 |
+| 1 | 10 | 2 |
+| 1 | 20 | 1 |
+
+Varje rad beskriver en kombination av *leverantör, produkt och butik*.
+
+Anta nu att verksamheten har en bestämd regel: **Om en leverantör kan leverera en produkt, leverantören samarbetar med en butik och butiken tar emot produkten, då gäller också kombinationen av alla tre.**
+
+Då beskriver vår tabell egentligen tre slags samband:
+
+- Vilka **produkter** varje **leverantör** kan leverera.
+- Vilka **butiker** varje **leverantör** samarbetar med.
+- Vilka **produkter** varje **butik** tar emot.
+
+Vi skulle kunna lagra dessa samband i tre separata tabeller. En `JOIN` mellan samtliga tre kan då återskapa exakt de giltiga kombinationerna av leverantör, produkt och butik. Om vi behåller allt i samma tabell upprepar vi i stället samband som redan bestäms av de andra.
+
+Det kallas ett **joinberoende**: en relation kan återskapas fullständigt genom att kombinera flera mindre relationer, utan att vi förlorar information eller skapar ogiltiga kombinationer.
+
+Det avgörande är **verksamhetsregeln**. Om bokhandeln i stället avtalar varje enskild kombination av leverantör, produkt och butik separat, kan vi inte härleda alla kombinationer från de tre parvisa sambanden. Då skulle uppdelningen kunna skapa leveranser som aldrig avtalats.
+
+5NF hjälper oss alltså att upptäcka när en komplex relation i själva verket kan beskrivas av flera mindre, oberoende relationer – **men bara när vi vet att uppdelningen är giltig för alla tillåtna datatillstånd**, inte bara för de exempelrader vi råkar ha just nu.
 
 Det är alltså inte korrekt att 4NF bara betyder ”använd en kopplingstabell” eller att 5NF betyder ”ha flera kopplingar mellan samma entiteter”. Båda handlar om vilka beroenden som faktiskt gäller i informationen.
 
