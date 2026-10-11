@@ -25,8 +25,8 @@
 16. Att förändra databasens struktur
 
 ## IV. Mer avancerad SQL
-17. Views och återanvändbara frågor
-18. CTE och strukturerade frågor
+17. Views och återanvändbara Queries
+18. Att dela upp Queries i logiska steg
 19. Fönsterfunktioner
 20. Transaktioner och samtidighet
 21. Index och frågeprestanda
