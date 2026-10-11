@@ -10,7 +10,7 @@ Nu ska vi kombinera **resultaten från flera frågor**. SQL har särskilda mäng
 
 ## Grund
 
-### Två frågor med samma slags resultat
+### Två Queries med samma slags resultat
 
 Vi fortsätter med kunderna och deras adresser. För att kunna undersöka överlappningar lägger vi till några adresser.
 
@@ -177,7 +177,7 @@ WHERE id IN (
 
 Här får `INTERSECT` först fram kund-id som förekommer i båda städerna. Den yttre frågan hämtar sedan kundernas namn.
 
-### Krav på frågornas resultat
+### Krav på Queries och deras resultat
 
 För att kombinera två frågor med `UNION`, `INTERSECT` eller `EXCEPT` måste de ge **samma antal kolumner**. Kolumnernas datatyper måste dessutom vara förenliga så att resultaten kan kombineras.
 
@@ -257,7 +257,7 @@ De tre konstruktionerna löser delvis överlappande, men olika slags problem.
 | Konstruktion | Naturlig användning |
 |---|---|
 | `JOIN` | Kombinera relaterad information från flera tabeller |
-| Subquery | Använda ett frågeresultat som del av en annan fråga |
+| Subquery | Använda ett Query-resultat som del av en annan fråga |
 | `UNION` | Förena resultatrader från flera frågor |
 | `INTERSECT` | Hitta resultatrader som finns i båda frågorna |
 | `EXCEPT` | Hitta resultatrader som finns i den första men inte den andra frågan |
@@ -289,5 +289,5 @@ Det knyter an till vår tidigare diskussion om datamodellering och Views: vi kan
 ## Reflektion
 
 1. Varför kan det vara viktigt att behålla dubbletter i vissa resultat men ta bort dem i andra?
-2. Vad är skillnaden mellan att kombinera tabeller med `JOIN` och att kombinera frågeresultat med `UNION`?
+2. Vad är skillnaden mellan att kombinera tabeller med `JOIN` och att kombinera Query-resultat med `UNION`?
 3. När vi skapar en grupp som ”kunder med adresser i båda städerna”, är det då en egenskap hos kunden eller ett resultat av hur vi väljer att undersöka informationen?
