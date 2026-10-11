@@ -2,9 +2,9 @@
 
 Hittills har vi arbetat med bokhandelns kunder, adresser och produkter som om tabellerna redan fanns.
 
-Men någon måste bestämma hur informationen ska lagras. Vilka uppgifter ska en produkt ha? Vilka värden ska vi tillåta? Och vad händer om någon försöker registrera en produkt utan titel?
+Men om vi faktiskt bygger databasens tabeller, vilka uppgifter ska en produkt ha? Vilka värden ska vi tillåta? Vilka begränsningar och regler vill vi ha – vad händer om någon försöker registrera en produkt utan titel?
 
-När vi skapar en tabell går vi från vår **idé om informationen** till en struktur som databashanteraren kan kontrollera.
+När vi skapar en tabell går vi från vår **idé om informationen** till en struktur för praktisk användning.
 
 ## Grund
 
