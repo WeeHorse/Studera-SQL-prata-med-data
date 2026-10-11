@@ -14,7 +14,7 @@
 7. Datum och tid
 8. Aggregering och gruppering
 9. Att kombinera flera tabeller
-10. Underfrågor
+10. Subqueries
 11. Mängdoperationer
 
 ## III. Att skapa och förändra data
