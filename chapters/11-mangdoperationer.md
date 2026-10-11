@@ -1,4 +1,4 @@
-# 11. Mängdoperationer
+# 11. SET-operationer
 
 I en bokhandel kan vi ställa frågor som handlar om två olika grupper av information.
 
