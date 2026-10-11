@@ -46,6 +46,8 @@ Därför kan vi ge varje person ett eget **id**.
 
 Kolumnen `id` kan fungera som tabellens **primärnyckel** (*primary key*). Primärnyckelns värde måste vara unikt för varje rad och får inte vara `NULL`.
 
+När vi vill hitta eller referera till en viss rad använder vi i första hand primärnyckeln. Om vi exempelvis skriver `WHERE id = 2` menar vi just Olofs rad – och därmed den information vi har lagrat om honom.
+
 Identiteten påverkas då inte av att en person byter namn.
 
 En primärnyckel kan också bestå av flera kolumner, men i våra första exempel använder vi ett enda `id` för att hålla modellen enkel.
