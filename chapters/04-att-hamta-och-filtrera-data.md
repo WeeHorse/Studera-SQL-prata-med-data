@@ -10,17 +10,17 @@ Vi behöver kunna avgränsa informationen. Med SQL beskriver vi vilka uppgifter 
 
 ### Att välja information med SELECT
 
-Vi fortsätter med bokhandelns kunder. Vi har nu registrerat ytterligare några:
+Vi fortsätter med bokhandelns kunder. Vi har nu registrerat ytterligare några och lagt till deras födelsedatum i kolumnen `birthday`:
 
 **customers**
 
-| id | name | email |
-|---|---|---|
-| 1 | Benjamin | benjamin@example.com |
-| 2 | Olof | olof@example.com |
-| 3 | Anaïs | anais@example.com |
-| 4 | Beatrice | beatrice@example.com |
-| 5 | Anna | anna@example.com |
+| id | name | email | birthday |
+|---|---|---|---|
+| 1 | Benjamin | benjamin@example.com | 1968-04-12 |
+| 2 | Olof | olof@example.com | 1982-09-03 |
+| 3 | Anaïs | anais@example.com | 1995-06-21 |
+| 4 | Beatrice | beatrice@example.com | 2000-02-15 |
+| 5 | Anna | anna@example.com | 1975-11-08 |
 
 Vi har redan sett hur vi kan hämta vissa kolumner:
 
@@ -41,9 +41,9 @@ WHERE id = 2;
 
 Resultat:
 
-| id | name | email |
-|---|---|---|
-| 2 | Olof | olof@example.com |
+| id | name | email | birthday |
+|---|---|---|---|
+| 2 | Olof | olof@example.com | 1982-09-03 |
 
 `WHERE` följs av ett **villkor**. En rad kommer med i resultatet när villkoret är uppfyllt.
 
@@ -71,12 +71,12 @@ De vanligaste operatorerna är:
 Exempelvis:
 
 ```sql
-SELECT *
+SELECT name, birthday
 FROM customers
-WHERE id > 3;
+WHERE birthday > '1970-01-09';
 ```
 
-ger oss kunderna med id 4 och 5.
+ger oss kunderna som är födda efter den 9 januari 1970.
 
 När vi jämför textvärden behöver vi vanligtvis skriva värdet inom enkla citattecken, som i `name = 'Anna'`.
 
@@ -87,12 +87,13 @@ Vi använder `<>` för ”inte lika med”. I flera databassystem fungerar även
 Vi kan ställa flera krav samtidigt.
 
 ```sql
-SELECT *
+SELECT name, birthday
 FROM customers
-WHERE id > 2 AND id < 5;
+WHERE birthday >= '1980-01-01'
+  AND birthday < '2000-01-01';
 ```
 
-Här måste **båda** villkoren vara uppfyllda. Vi får kunderna med id 3 och 4.
+Här måste **båda** villkoren vara uppfyllda. Vi får Olof och Anaïs, som är födda under perioden 1980–1999.
 
 Med `OR` räcker det att **minst ett** villkor är uppfyllt:
 
@@ -115,17 +116,18 @@ WHERE NOT name = 'Olof';
 När vi vill hitta värden mellan två gränser kan vi använda `BETWEEN`:
 
 ```sql
-SELECT *
+SELECT name, birthday
 FROM customers
-WHERE id BETWEEN 2 AND 4;
+WHERE birthday BETWEEN '1980-01-01' AND '1999-12-31';
 ```
 
 Det motsvarar:
 
 ```sql
-SELECT *
+SELECT name, birthday
 FROM customers
-WHERE id >= 2 AND id <= 4;
+WHERE birthday >= '1980-01-01'
+  AND birthday <= '1999-12-31';
 ```
 
 **Båda gränserna ingår** i `BETWEEN`.
