@@ -10,7 +10,7 @@ Det kallas en *subquery*, på svenska en **underfråga**.
 
 ## Grund
 
-### En fråga inuti en annan
+### En Query inuti en annan
 
 Vi använder bokhandelns produkter:
 

@@ -1,4 +1,4 @@
-# 17. Views och återanvändbara frågor
+# 17. Views och återanvändbara Queries
 
 Vi har byggt bokhandelns databas med flera tabeller. Kunder, adresser, produkter, produkttyper och författare lagras var för sig, med relationer mellan dem.
 
@@ -10,7 +10,7 @@ En **View**, eller vy, låter oss beskriva **hur information ska betraktas**, ut
 
 ## Grund
 
-### Från fråga till View
+### Från Query till View
 
 Vi börjar med två tabeller vi redan känner:
 
@@ -45,7 +45,7 @@ INNER JOIN product_types AS t
     ON p.product_type_id = t.id;
 ```
 
-Frågan fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
+denna Query fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
 
 Då kan vi skapa en View:
 
@@ -62,9 +62,9 @@ INNER JOIN product_types AS t
     ON p.product_type_id = t.id;
 ```
 
-Nu har vi gett frågan namnet `product_overview`.
+Nu har vi gett denna Query namnet `product_overview`.
 
-### Att fråga en View
+### Att använda en View
 
 Vi kan läsa från vyn nästan som från en tabell:
 
@@ -91,7 +91,7 @@ WHERE product_type = 'Roman'
 ORDER BY title;
 ```
 
-Vyn är alltså inte ett färdigt utskrivet resultat, utan en **namngiven fråga** som vi kan fortsätta arbeta med.
+Vyn är alltså inte ett färdigt utskrivet resultat, utan en **namngiven Query** som vi kan fortsätta arbeta med.
 
 ### Lagrar en View data?
 

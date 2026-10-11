@@ -382,7 +382,7 @@ Men ska `Anna` och `anna` räknas som samma namn? Hur ska `Å`, `Ä` och `Ö` so
 
 Det beror på språkregler och vilka inställningar som används för att jämföra text, ofta kallade **kollationer** (*collations*).
 
-En och samma SQL-fråga kan därför bete sig något olika i olika databasmiljöer.
+En och samma SQL-Query kan därför bete sig något olika i olika databasmiljöer.
 
 Det är värt att komma ihåg: ett villkor som ser enkelt ut kan bygga på ganska många antaganden om informationens betydelse.
 
@@ -400,4 +400,4 @@ Det blir särskilt viktigt när vi använder SQL för rapportering och analys. E
 
 1. Vad är skillnaden mellan att information saknas och att information har värdet noll eller en tom sträng?
 2. Varför behöver vi uttryckligen ange en sorteringsordning när vi vill hämta de första tio posterna?
-3. Hur kan två SQL-frågor ge olika, men ändå korrekta, bilder av samma datamängd?
+3. Hur kan två SQL-Queries ge olika, men ändå korrekta, bilder av samma datamängd?

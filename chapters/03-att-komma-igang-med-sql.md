@@ -16,7 +16,11 @@ Vi använder SQL för att läsa information, men också för att lägga till, f�
 
 Vi börjar med att läsa information.
 
-### Vår första SQL-fråga
+En **Query** (*databasfråga*) är en instruktion som ställer en fråga till databasen, exempelvis genom `SELECT`. Vi använder **Queries** för att hämta och bearbeta information. När vi talar om en *fråga* i vanligt språk menar vi däremot det informationsbehov vi vill få svar på.
+
+En Query är en sorts **SQL-sats** (*statement*). SQL-satser kan även förändra data eller databasens struktur, exempelvis med `INSERT` eller `CREATE TABLE`.
+
+### Vår första Query
 
 Vi har sedan tidigare en tabell med bokhandelns kunder:
 
@@ -43,7 +47,7 @@ Resultatet blir:
 | Olof |
 | Anaïs |
 
-Vi kan läsa frågan nästan som en vanlig mening:
+Vi kan läsa denna Query nästan som en vanlig mening:
 
 - `SELECT name` – välj kolumnen `name`.
 - `FROM customers` – från tabellen `customers`.
@@ -178,9 +182,9 @@ beskriver vi vårt önskade resultat. Vi säger inte att databashanteraren ska l
 
 Databashanteraren kan välja mellan olika sätt att hitta informationen, exempelvis med hjälp av ett index. Vi ska undersöka detta senare i boken.
 
-### SQL följer en struktur
+### En Query följer en struktur
 
-En SQL-fråga kan innehålla flera delar. En enkel mall är:
+En SQL-Query kan innehålla flera delar. En enkel mall är:
 
 ```sql
 SELECT column_name
@@ -242,7 +246,7 @@ Grundläggande satser som våra `SELECT`-exempel fungerar i regel på samma sät
 
 Vi kommer att använda standardnära SQL i boken och kommentera viktiga skillnader i fotnoter. Mer omfattande skillnader samlar vi i separata referenshäften.
 
-### En SQL-fråga förändrar inte nödvändigtvis data
+### En Query förändrar inte data
 
 Vår `SELECT`-fråga läser data utan att ändra den.
 
