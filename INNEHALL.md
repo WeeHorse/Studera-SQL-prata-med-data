@@ -15,7 +15,7 @@
 8. Aggregering och gruppering
 9. Att kombinera flera tabeller
 10. Subqueries
-11. Mängdoperationer
+11. SET-operationer
 
 ## III. Att skapa och förändra data
 12. Att skapa tabeller
