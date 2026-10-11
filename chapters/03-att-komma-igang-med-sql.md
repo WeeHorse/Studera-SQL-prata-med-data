@@ -47,7 +47,7 @@ Resultatet blir:
 | Olof |
 | Anaïs |
 
-Vi kan läsa Queryn nästan som en vanlig mening:
+Vi kan läsa denna Query nästan som en vanlig mening:
 
 - `SELECT name` – välj kolumnen `name`.
 - `FROM customers` – från tabellen `customers`.
