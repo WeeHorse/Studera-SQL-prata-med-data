@@ -20,10 +20,10 @@ Här har vi en **nyckel** (`Förnamn`) och ett **värde** (`Benjamin`).
 
 Nyckeln beskriver vad informationen handlar om och värdet innehåller själva uppgiften.
 
-Om vi samlar flera sådana uppgifter kan vi beskriva exempelvis en person:
+Om vi samlar flera sådana uppgifter kan vi beskriva exempelvis en kund i en bokhandel:
 
 ```text
-Person:
+Kund:
     Förnamn: Benjamin
     Efternamn: Berglund
     Telefon: 0123-456789
@@ -40,7 +40,7 @@ Samma information kan representeras på flera olika sätt.
 I JavaScript kan vi exempelvis skriva:
 
 ```js
-const person = {
+const customer = {
     firstName: "Benjamin",
     lastName: "Berglund",
     phone: "0123-456789",
@@ -62,12 +62,12 @@ Men vi skulle också kunna organisera informationen i en tabell.
 | Olof | Olofsson | 0231-564789 | Storfors |
 | Anaïs | Martin | +43 21-976 542 | Loire |
 
-Här beskriver varje **rad** en person, och varje **kolumn** en viss typ av uppgift om personen.
+Här beskriver varje **rad** en kund, och varje **kolumn** en viss typ av uppgift om kunden.
 
 Vi kan förstå tabellen genom tre enkla begrepp:
 
 - **Tabell:** En samling uppgifter som hör ihop.
-- **Rad:** En enskild post, exempelvis en person.
+- **Rad:** En enskild post, exempelvis en kund.
 - **Kolumn:** En viss egenskap hos posterna, exempelvis förnamn.
 
 I en relationell databas bygger vi upp vår information med sådana tabeller.
@@ -94,9 +94,9 @@ Skillnaden mellan databasen och databashanteraren kan jämföras med skillnaden 
 
 ### Att ställa frågor till informationen
 
-Anta att vi har en databas med tusentals personer.
+Anta att bokhandeln har en databas med tusentals kunder.
 
-Vi kanske vill veta vilka personer som bor i Hemmavan, eller vilka som har ett efternamn som börjar med B.
+Vi kanske vill veta vilka kunder som bor i Hemmavan, eller vilka som har ett efternamn som börjar med B.
 
 Vi skulle kunna läsa igenom alla poster manuellt, men det vore knappast praktiskt.
 
@@ -106,7 +106,7 @@ Med SQL kan en sådan fråga se ut så här:
 
 ```sql
 SELECT *
-FROM persons
+FROM customers
 WHERE city = 'Hemmavan';
 ```
 
@@ -116,32 +116,32 @@ Detta är en grundläggande idé bakom SQL.
 
 ### Relationer mellan data
 
-Låt oss anta att vi också vill hålla reda på vilka husdjur våra personer äger.
+Låt oss anta att bokhandeln också behöver hålla reda på kundernas adresser.
 
-Vi skulle kunna lägga till kolumner för husdjurets namn och djurart i persontabellen. Men vad händer om en person äger tre hundar? Eller om två personer äger samma hund?
+Vi skulle kunna lagra gatuadress, postnummer och ort tillsammans med varje kund. Men vad händer när en kund vill ha en separat leveransadress? Eller när adressuppgifter behöver förändras?
 
-Ett annat sätt är att lagra personer och husdjur i separata tabeller och beskriva hur de hör ihop.
+Ett annat sätt är att lagra kunder och adresser i separata tabeller och beskriva hur de hör ihop.
 
-**Personer**
+**Kunder (customers)**
 
 | id | name |
 |---|---|
 | 1 | Benjamin |
 | 2 | Olof |
 
-**Husdjur**
+**Adresser (addresses)**
 
-| id | name | species | owner_id |
+| id | customer_id | street | city |
 |---|---|---|---|
-| 1 | Fido | Hund | 1 |
-| 2 | Morris | Katt | 1 |
-| 3 | Bella | Hund | 2 |
+| 1 | 1 | Hemmagatan 1 | Hemmavan |
+| 2 | 1 | Storgatan 4 | Storfors |
+| 3 | 2 | Parkvägen 2 | Storfors |
 
-Kolumnen `owner_id` innehåller ett värde som pekar på en person i den första tabellen.
+Kolumnen `customer_id` innehåller kundens id och visar vilken kund varje adress hör till.
 
-Det gör att vi kan organisera uppgifter om olika saker var för sig, samtidigt som vi bevarar sambanden mellan dem.
+Nu kan en kund ha flera adresser, utan att vi behöver skapa fler adresskolumner i kundtabellen.
 
-Detta är en av de viktigaste principerna bakom relationella databaser.
+Detta är en av de viktigaste principerna bakom relationella databaser: vi kan organisera uppgifter om olika saker var för sig, samtidigt som vi bevarar sambanden mellan dem.
 
 Vi kommer att återkomma till hur relationer fungerar i senare kapitel.
 
@@ -151,9 +151,9 @@ Vi kommer att återkomma till hur relationer fungerar i senare kapitel.
 
 När vi lagrar information beskriver vi inte hela verkligheten. Vi väljer ut de egenskaper och samband som är relevanta för vårt syfte.
 
-En person har betydligt fler egenskaper än förnamn, efternamn och adress. Men om vi bygger ett adressregister kanske det är allt vi behöver veta.
+En kund har betydligt fler egenskaper än namn och adress. Men om vi bygger ett kundregister kanske det är allt vi behöver veta.
 
-Om vi i stället bygger ett journalsystem, ett bokningssystem eller en bankapplikation behöver vi andra uppgifter och andra samband.
+När bokhandeln senare ska hantera beställningar, produkter och betalningar behöver vi andra uppgifter och andra samband.
 
 Det innebär att en databas inte bara är ett sätt att lagra information. **Den är också en modell av den del av verkligheten vi vill beskriva.**
 
