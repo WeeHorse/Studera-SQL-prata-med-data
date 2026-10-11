@@ -224,7 +224,15 @@ SELECT c.name, c.email
 FROM customers AS c;
 ```
 
-Prefixet `c.` talar om att kolumnerna kommer från tabellen som vi kallat `c`. Detta blir särskilt användbart när vi hämtar information från flera tabeller.
+Prefixet `c.` talar om att kolumnerna kommer från tabellen som vi kallat `c`. Detta blir särskilt användbart när vi hämtar information från flera tabeller:
+
+```sql
+SELECT c.name, c.email, a.street, a.city
+FROM customers AS c, addresses AS a
+WHERE a.customer_id = c.id;
+```
+
+Här kopplar vi samman kunderna med deras adresser genom att jämföra `addresses.customer_id` med `customers.id`. Vi går igenom hur sådana kopplingar fungerar längre fram.
 
 ### SQL är ett språk med olika dialekter
 
