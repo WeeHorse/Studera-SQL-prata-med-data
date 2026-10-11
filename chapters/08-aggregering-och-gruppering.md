@@ -255,7 +255,7 @@ FROM products;
 
 | inventory_value |
 |---:|
-| 8176.00 |
+| 8016.00 |
 
 Detta är ett **beräknat värde utifrån aktuella priser och lagersaldon**, inte nödvändigtvis varornas bokförda lagervärde eller inköpsvärde.
 
