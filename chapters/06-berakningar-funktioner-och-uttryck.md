@@ -1,4 +1,4 @@
-# 5. Beräkningar, funktioner och uttryck
+# 6. Beräkningar, funktioner och uttryck
 
 Informationen i en databas behöver inte alltid presenteras exakt som den är lagrad.
 

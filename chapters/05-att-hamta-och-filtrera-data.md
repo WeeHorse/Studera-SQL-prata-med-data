@@ -1,4 +1,4 @@
-# 4. Att hämta och filtrera data
+# 5. Att hämta och filtrera data
 
 Att ha mycket information är inte samma sak som att hitta det man behöver.
 
