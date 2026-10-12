@@ -1,0 +1,28 @@
+name: Publishing pilot
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm test
+      - run: npm run build:web
+      - run: npm run build:pdf
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publishing-pilot
+          path: |
+            .vitepress/dist/
+            dist/print/
+          if-no-files-found: error

@@ -1,0 +1,17 @@
+{
+  "name": "studera-sql-publicering",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:web": "vitepress dev",
+    "build:web": "vitepress build",
+    "build:pdf": "vivliostyle build -c publishing/print/vivliostyle.config.mjs",
+    "build": "npm run build:web && npm run build:pdf",
+    "test": "node --test tests/*.test.mjs",
+    "preview:web": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4",
+    "@vivliostyle/cli": "11.3.3"
+  }
+}
