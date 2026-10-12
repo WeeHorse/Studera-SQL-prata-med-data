@@ -1,0 +1,18 @@
+{
+  "@context": [
+    "https://schema.org",
+    "https://www.w3.org/ns/pub-context"
+  ],
+  "type": "Book",
+  "conformsTo": "https://github.com/vivliostyle/vivliostyle-cli",
+  "name": "Studera SQL – prata med data: Kapitel 1",
+  "dateModified": "2026-10-12T22:22:08.973Z",
+  "readingOrder": [
+    {
+      "url": "content/sv/chapters/01-vad-ar-en-databas.html",
+      "name": "1. Vad är en databas?"
+    }
+  ],
+  "resources": [],
+  "links": []
+}
