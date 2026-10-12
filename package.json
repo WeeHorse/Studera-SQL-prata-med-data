@@ -4,11 +4,11 @@
   "type": "module",
   "scripts": {
     "dev:web": "vitepress dev",
+    "preview:web": "vitepress preview",
     "build:web": "vitepress build",
-    "build:pdf": "vivliostyle build -c publishing/print/vivliostyle.config.mjs",
+    "build:pdf": "node scripts/build-print.mjs",
     "build": "npm run build:web && npm run build:pdf",
-    "test": "node --test tests/*.test.mjs",
-    "preview:web": "vitepress preview"
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "vitepress": "1.6.4",
