@@ -1,0 +1,255 @@
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8">
+    <title>1. Vad är en databas?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../../publishing/print/book.css">
+  </head>
+  <body>
+    <section class="level1">
+      <h1 id="1-vad-är-en-databas">1. Vad är en databas?</h1>
+      <p>Vi människor har alltid behövt hålla reda på saker. Vilka varor finns i lager? Vem äger ett hus? Hur mycket pengar finns på ett konto? Vilka elever går i en viss klass?</p>
+      <p>Vi kan skriva ner informationen på papper, spara den i filer eller hålla den i minnet. Men när mängden information växer behöver vi kunna organisera den så att den blir enkel att hitta, använda och förändra.</p>
+      <p>Det är i grunden vad databaser handlar om.</p>
+      <section class="level2">
+        <h2 id="grund">Grund</h2>
+        <section class="level3">
+          <h3 id="data-nycklar-och-värden">Data, nycklar och värden</h3>
+          <p>Vi kan börja med något mycket enkelt:</p>
+          <pre class="language-text"><code class="language-text">Förnamn: Benjamin</code></pre>
+          <p>Här har vi en <strong>nyckel</strong> (<code>Förnamn</code>) och ett <strong>värde</strong> (<code>Benjamin</code>).</p>
+          <p>Nyckeln beskriver vad informationen handlar om och värdet innehåller själva uppgiften.</p>
+          <p>Om vi samlar flera sådana uppgifter kan vi beskriva exempelvis en kund i en bokhandel:</p>
+          <pre class="language-text"><code class="language-text">Kund:
+    Förnamn: Benjamin
+    Efternamn: Berglund
+    Telefon: 0123-456789
+    Adress:
+        Gata: Hemmagatan 1
+        Postnummer: 124 56
+        Ort: Hemmavan</code></pre>
+          <p>Nu har vi skapat en enkel datastruktur. Vi har också grupperat några av uppgifterna: gatan, postnumret och orten beskriver tillsammans en adress.</p>
+          <p>Samma information kan representeras på flera olika sätt.</p>
+          <p>I JavaScript kan vi exempelvis skriva:</p>
+          <pre class="language-js"><code class="language-js"><span class="token keyword">const</span> customer <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">firstName</span><span class="token operator">:</span> <span class="token string">"Benjamin"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">lastName</span><span class="token operator">:</span> <span class="token string">"Berglund"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">phone</span><span class="token operator">:</span> <span class="token string">"0123-456789"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">address</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">street</span><span class="token operator">:</span> <span class="token string">"Hemmagatan 1"</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">postalCode</span><span class="token operator">:</span> <span class="token string">"124 56"</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">city</span><span class="token operator">:</span> <span class="token string">"Hemmavan"</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+          <p>Men vi skulle också kunna organisera informationen i en tabell.</p>
+        </section>
+        <section class="level3">
+          <h3 id="tabeller">Tabeller</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Förnamn</th>
+                <th>Efternamn</th>
+                <th>Telefon</th>
+                <th>Ort</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Benjamin</td>
+                <td>Berglund</td>
+                <td>0123-456789</td>
+                <td>Hemmavan</td>
+              </tr>
+              <tr>
+                <td>Olof</td>
+                <td>Olofsson</td>
+                <td>0231-564789</td>
+                <td>Storfors</td>
+              </tr>
+              <tr>
+                <td>Anaïs</td>
+                <td>Martin</td>
+                <td>+43 21-976 542</td>
+                <td>Loire</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Här beskriver varje <strong>rad</strong> en kund, och varje <strong>kolumn</strong> en viss typ av uppgift om kunden.</p>
+          <p>Vi kan förstå tabellen genom tre enkla begrepp:</p>
+          <ul>
+            <li><strong>Tabell:</strong> En samling uppgifter som hör ihop.</li>
+            <li><strong>Rad:</strong> En enskild post, exempelvis en kund.</li>
+            <li><strong>Kolumn:</strong> En viss egenskap hos posterna, exempelvis förnamn.</li>
+          </ul>
+          <p>I en relationell databas bygger vi upp vår information med sådana tabeller.</p>
+        </section>
+        <section class="level3">
+          <h3 id="vad-gör-detta-till-en-databas">Vad gör detta till en databas?</h3>
+          <p>En tabell i ett dokument eller kalkylblad är inte automatiskt en databas.</p>
+          <p>En <strong>databas</strong> är en organiserad samling data som kan lagras, hanteras och användas. För att arbeta med den använder vi vanligtvis ett <strong>databashanteringssystem</strong> (DBMS, Database Management System).</p>
+          <p>I relationella databaser använder vi frågespråket <strong>SQL (Structured Query Language)</strong> för att läsa, lägga till, förändra och ta bort information. SQL är utformat för att likna vanlig engelska, samtidigt som språket har en tydlig struktur som datorer kan tolka.</p>
+          <p>Exempel på databashanteringssystem som använder SQL är MySQL, PostgreSQL, SQLite och Microsoft SQL Server.</p>
+          <p>Databashanteraren hjälper oss bland annat att:</p>
+          <ul>
+            <li>Lagra och hämta information.</li>
+            <li>Lägga till, ändra och ta bort uppgifter.</li>
+            <li>Söka efter information som uppfyller vissa villkor.</li>
+            <li>Kontrollera att informationen följer bestämda regler.</li>
+            <li>Hantera att flera användare arbetar med samma information.</li>
+          </ul>
+          <p>Skillnaden mellan databasen och databashanteraren kan jämföras med skillnaden mellan ett dokument och programmet som hanterar dokumentet.</p>
+        </section>
+        <section class="level3">
+          <h3 id="att-ställa-frågor-till-informationen">Att ställa frågor till informationen</h3>
+          <p>Anta att bokhandeln har en databas med tusentals kunder.</p>
+          <p>Vi kanske vill veta vilka kunder som bor i Hemmavan, eller vilka som har ett efternamn som börjar med B.</p>
+          <p>Vi skulle kunna läsa igenom alla poster manuellt, men det vore knappast praktiskt.</p>
+          <p>I stället kan vi ställa en fråga till databasen.</p>
+          <p>Med SQL kan en sådan fråga se ut så här:</p>
+          <pre class="language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
+<span class="token keyword">FROM</span> customers
+<span class="token keyword">WHERE</span> city <span class="token operator">=</span> <span class="token string">'Hemmavan'</span><span class="token punctuation">;</span></code></pre>
+          <p>Vi behöver inte förstå syntaxen än. Det viktiga är att vi beskriver <strong>vilken information vi vill ha</strong>, snarare än hur databashanteraren ska leta efter den.</p>
+          <p>Detta är en grundläggande idé bakom SQL.</p>
+        </section>
+        <section class="level3">
+          <h3 id="relationer-mellan-data">Relationer mellan data</h3>
+          <p>Låt oss anta att bokhandeln också behöver hålla reda på kundernas adresser.</p>
+          <p>Vi skulle kunna lagra gatuadress, postnummer och ort tillsammans med varje kund. Men vad händer när en kund vill ha en separat leveransadress? Eller när adressuppgifter behöver förändras?</p>
+          <p>Ett annat sätt är att lagra kunder och adresser i separata tabeller och beskriva hur de hör ihop.</p>
+          <p><strong>Kunder (customers)</strong></p>
+          <table>
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Benjamin</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Olof</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong>Adresser (addresses)</strong></p>
+          <table>
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>customer_id</th>
+                <th>street</th>
+                <th>city</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>Hemmagatan 1</td>
+                <td>Hemmavan</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>1</td>
+                <td>Storgatan 4</td>
+                <td>Storfors</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>2</td>
+                <td>Parkvägen 2</td>
+                <td>Storfors</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Kolumnen <code>customer_id</code> innehåller kundens id och visar vilken kund varje adress hör till.</p>
+          <p>Nu kan en kund ha flera adresser, utan att vi behöver skapa fler adresskolumner i kundtabellen.</p>
+          <p>Detta är en av de viktigaste principerna bakom relationella databaser: vi kan organisera uppgifter om olika saker var för sig, samtidigt som vi bevarar sambanden mellan dem.</p>
+          <p>Vi kommer att återkomma till hur relationer fungerar i senare kapitel.</p>
+        </section>
+      </section>
+      <section class="level2">
+        <h2 id="avancerat">Avancerat</h2>
+        <section class="level3">
+          <h3 id="en-databas-är-en-modell-av-verkligheten">En databas är en modell av verkligheten</h3>
+          <p>När vi lagrar information beskriver vi inte hela verkligheten. Vi väljer ut de egenskaper och samband som är relevanta för vårt syfte.</p>
+          <p>En kund har betydligt fler egenskaper än namn och adress. Men om vi bygger ett kundregister kanske det är allt vi behöver veta.</p>
+          <p>När bokhandeln senare ska hantera beställningar, produkter och betalningar behöver vi andra uppgifter och andra samband.</p>
+          <p>Det innebär att en databas inte bara är ett sätt att lagra information. <strong>Den är också en modell av den del av verkligheten vi vill beskriva.</strong></p>
+          <p>Modellen påverkar vad vi senare kan fråga efter, beräkna och dra slutsatser om.</p>
+        </section>
+        <section class="level3">
+          <h3 id="är-alla-databaser-relationella">Är alla databaser relationella?</h3>
+          <p>Nej.</p>
+          <p>Information kan organiseras på olika sätt, och olika databastyper är lämpliga för olika problem.</p>
+          <p>Exempelvis:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Databastyp</th>
+                <th>Grundläggande idé</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Relationell</td>
+                <td>Information organiseras i tabeller med definierade samband.</td>
+              </tr>
+              <tr>
+                <td>Dokumentorienterad</td>
+                <td>Information organiseras som dokument, exempelvis JSON.</td>
+              </tr>
+              <tr>
+                <td>Nyckel-värde</td>
+                <td>Information hämtas och lagras med hjälp av identifierande nycklar.</td>
+              </tr>
+              <tr>
+                <td>Grafdatabas</td>
+                <td>Information representeras som noder och relationer mellan dessa.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Det finns många fler varianter och kombinationer.</p>
+          <p>Den här boken handlar framför allt om <strong>relationella databaser och SQL</strong>, men många av resonemangen kring hur vi representerar och organiserar information är relevanta även för andra databastyper.</p>
+        </section>
+        <section class="level3">
+          <h3 id="data-och-datatyper">Data och datatyper</h3>
+          <p>Hittills har vi beskrivit information med text och tabeller. Men alla värden är inte av samma slag.</p>
+          <p>Exempelvis:</p>
+          <pre class="language-text"><code class="language-text">Namn: Anna
+Ålder: 27
+Pris: 149.50
+Registrerad: 2026-01-15
+Aktiv: Ja</code></pre>
+          <p>Vi vill kunna göra olika saker med dessa värden.</p>
+          <p>Ett namn kan vi jämföra eller söka efter. En ålder kan vi räkna med. Ett datum kan vi jämföra med andra datum.</p>
+          <p>Databaser använder därför <strong>datatyper</strong> för att beskriva vilken sorts värden som kan lagras i en kolumn.</p>
+          <p>Det hjälper databashanteraren att tolka och bearbeta informationen på ett förutsägbart sätt.</p>
+          <p>Vi kommer att gå närmare in på datatyper när vi börjar skapa egna tabeller.</p>
+        </section>
+        <section class="level3">
+          <h3 id="databasens-ansvar">Databasens ansvar</h3>
+          <p>Vi har redan sett att en databas kan lagra information och besvara frågor.</p>
+          <p>Men vad händer om två användare försöker förändra samma uppgift samtidigt? Eller om en ändring avbryts innan den är färdig?</p>
+          <p>En databashanterare behöver kunna hantera sådana situationer utan att informationen blir motsägelsefull eller går förlorad.</p>
+          <p>Det är bland annat därför vi använder databashanterare i stället för att bara skriva och läsa vanliga textfiler.</p>
+          <p>Senare i boken kommer vi att undersöka hur databaser upprätthåller dataintegritet, hanterar transaktioner och gör information tillgänglig för flera användare.</p>
+        </section>
+      </section>
+      <section class="level2">
+        <h2 id="reflektion">Reflektion</h2>
+        <ol>
+          <li>Vad är egentligen skillnaden mellan att lagra information och att organisera information?</li>
+          <li>Hur påverkas en datamodell av vad vi vill använda informationen till?</li>
+          <li>Finns det situationer där en vanlig fil är en bättre lösning än en databas?</li>
+        </ol>
+      </section>
+    </section>
+  
+
+</body></html>
