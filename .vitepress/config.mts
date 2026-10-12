@@ -5,7 +5,8 @@ export default defineConfig({
   description: 'SQL, relationella databaser och informationshantering',
   srcDir: 'content',
   outDir: '.vitepress/dist',
-  cleanUrls: true,
+  // Explicit .html URLs also work on simple static file servers.
+  cleanUrls: false,
   locales: {
     root: { label: 'Start', lang: 'sv-SE' },
     sv: {
