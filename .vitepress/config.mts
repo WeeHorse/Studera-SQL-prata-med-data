@@ -1,11 +1,13 @@
 import { defineConfig } from 'vitepress';
+import { chapters } from '../scripts/book-content.mjs';
+
+const sidebar = chapters().map(({ title, url }) => ({ text: title, link: url }));
 
 export default defineConfig({
   title: 'Studera SQL – prata med data',
   description: 'SQL, relationella databaser och informationshantering',
   srcDir: 'content',
   outDir: '.vitepress/dist',
-  // Explicit .html URLs also work on simple static file servers.
   cleanUrls: false,
   locales: {
     root: { label: 'Start', lang: 'sv-SE' },
@@ -14,11 +16,9 @@ export default defineConfig({
       lang: 'sv-SE',
       themeConfig: {
         nav: [{ text: 'Start', link: '/sv/' }],
-        sidebar: [{ text: 'Kapitel 1 – Vad är en databas?', link: '/sv/chapters/01-vad-ar-en-databas' }]
+        sidebar
       }
     }
   },
-  themeConfig: {
-    search: { provider: 'local' }
-  }
+  themeConfig: { search: { provider: 'local' } }
 });
