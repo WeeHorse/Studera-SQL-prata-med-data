@@ -25,3 +25,21 @@ Förhandsgranska det genererade webbresultatet via `npm run preview:web`, normal
 - Beslut om att göra `content/sv/` till enda redaktionella källan. Så länge dubbla filer finns måste de hållas synkroniserade.
 - Engelsk redaktionell översättning och terminologisäker automatöversättning.
 - GitHub Pages `base` och separat publiceringsflöde när mål-URL är vald.
+
+## GitHub Pages
+
+Webb och PDF publiceras automatiskt från `main` av `.github/workflows/publishing-pilot.yml`, efter lyckade tester och båda byggena. En Pull Request verifierar byggena men publicerar inte.
+
+**En gång i GitHub:** Repository → Settings → Pages → Build and deployment → Source: **GitHub Actions**. Om Pages kräver godkännande eller miljöinställning, använd miljön `github-pages`.
+
+Webbadress (för standarddomänen): https://weehorse.github.io/Studera-SQL-prata-med-data/
+
+PDF: https://weehorse.github.io/Studera-SQL-prata-med-data/downloads/studera-sql-sv-a5.pdf
+
+Bygget sätter `PAGES_BASE=/Studera-SQL-prata-med-data/` för rätt resurssökvägar. Lokalt är `PAGES_BASE` normalt tomt och VitePress använder `/`. För att testa GitHub Pages-strukturen lokalt kan du köra `PAGES_BASE=/Studera-SQL-prata-med-data/ npm run build:web`, men servern måste då också tillhandahålla sidan under motsvarande underkatalog.
+
+PDF skapas från Markdown, kopieras till `.vitepress/dist/downloads/` och ingår alltså i samma Pages-artifact som HTML, CSS och JavaScript. Byggresultat ska inte checkas in i Git.
+
+**Viktigt:** GitHub Pages är i standardfallet en **publik** webbplats. Lägg inte upp manus eller material där som måste hållas internt eller konfidentiellt.
+
+**Beroende:** Den här Pages-PR:en baseras på `infra/full-swedish-book-build` (PR #34). Mergas först PR #34 till `main` och därefter Pages-ändringarna, så publiceras hela boken och inte pilotkapitlet.
