@@ -1,28 +1,63 @@
-name: Publishing pilot
+name: Build and publish book
+
 on:
   pull_request:
   push:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      PAGES_BASE: /Studera-SQL-prata-med-data/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-audit --no-fund
+          cache: npm
+      - run: npm ci --no-audit --no-fund
       - run: npm test
       - run: npm run build:web
       - run: npm run build:pdf
-      - uses: actions/upload-artifact@v4
+      - name: Add A5 PDF to static site
+        run: |
+          test -s dist/print/studera-sql-sv-a5.pdf
+          mkdir -p .vitepress/dist/downloads
+          cp dist/print/studera-sql-sv-a5.pdf .vitepress/dist/downloads/studera-sql-sv-a5.pdf
+          touch .vitepress/dist/.nojekyll
+      - name: Upload preview bundle
+        uses: actions/upload-artifact@v4
         with:
-          name: publishing-pilot
+          name: book-web-and-a5-pdf
           path: |
             .vitepress/dist/
-            dist/print/
+            dist/print/studera-sql-sv-a5.pdf
+          include-hidden-files: true
           if-no-files-found: error
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .vitepress/dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
