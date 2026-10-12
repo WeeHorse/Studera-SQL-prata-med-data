@@ -1,5 +1,5 @@
 # Studera SQL – prata med data
 
-Den svenska utgåvan.
+Välkommen till bokens svenska utgåva. Alla 29 kapitel finns i sidomenyn, från **Vad är en databas?** till **Vad är en databas inte?**.
 
-[Kapitel 1 – Vad är en databas?](/sv/chapters/01-vad-ar-en-databas)
+[Börja med kapitel 1](/sv/chapters/01-vad-ar-en-databas.html).
