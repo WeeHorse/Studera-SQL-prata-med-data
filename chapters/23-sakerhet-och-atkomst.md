@@ -211,6 +211,115 @@ Exempelvis:
 
 Kryptering, åtkomstkontroll och säkerhetskopiering löser olika problem. Ingen enskild mekanism ersätter de andra.
 
+### Kryptering och hashning – två olika syften
+
+När vi lagrar känslig information behöver vi först avgöra **om originalvärdet någonsin ska kunna läsas igen**.
+
+**Kryptering** omvandlar ett värde till en form som kan återställas med rätt nyckel. Det kan behövas för uppgifter som en behörig verksamhetsprocess senare måste kunna läsa.
+
+**Hashning** beräknar däremot ett värde som inte är avsett att kunna omvandlas tillbaka till originalet. För lösenord använder vi särskilda, avsiktligt resurskrävande **lösenordshashningsalgoritmer** – inte en vanlig snabb hashfunktion.
+
+I MySQL finns exempelvis funktionen `SHA2()`:
+
+~~~sql
+SELECT SHA2('ett exempelvärde', 256);
+~~~
+
+Det är ett exempel på **vanlig hashning**, bland annat användbar i sammanhang där vi behöver ett kontrollvärde. **Det är inte ett lämpligt sätt att lagra lösenord.** En snabb hashfunktion som SHA-256 gör det möjligt att pröva stora mängder lösenordsgissningar på kort tid.
+
+För lösenord använder vi hellre etablerade bibliotek med exempelvis **Argon2id** eller andra moderna, anpassade lösenordshashningsalgoritmer.[^password-storage]
+
+[^password-storage]: Se [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html). Där beskrivs rekommenderade algoritmer, salt, parametrar och migrering av äldre lösenordshashar. Vanlig SHA-256, även med ett enkelt salt, är inte en ersättning för lösenordshashning.
+
+### Att skapa och verifiera ett lösenordshashvärde
+
+Anta att bokhandelns applikation har konton för personalen.
+
+När en användare skapar ett lösenord behöver programmet:
+
+1. Ta emot lösenordet via en skyddad anslutning.
+2. Låta ett lösenordshashningsbibliotek skapa ett hashvärde med ett **unikt salt** och lämpliga kostnadsparametrar.
+3. Lagra den resulterande lösenordsrepresentationen i databasen – **inte lösenordet i klartext**.
+
+Vi kan illustrera skillnaden med pseudokod; funktionsnamnen nedan är **inte inbyggda SQL-funktioner**:
+
+~~~text
+stored_hash = PasswordHasher.Hash(password)
+is_valid = PasswordHasher.Verify(password_attempt, stored_hash)
+~~~
+
+Vid inloggning verifierar programmet det angivna lösenordet mot det lagrade värdet. Det behöver inte, och ska inte försöka, dekryptera lösenordet.
+
+Salt är inte detsamma som en hemlig krypteringsnyckel. Ett slumpmässigt, unikt salt hjälper oss bland annat att undvika identiska hashvärden för identiska lösenord och försvårar förberäknade attacker. Etablerade bibliotek brukar själva generera och lagra salt tillsammans med algoritm och kostnadsparametrar i en strukturerad hashrepresentation.
+
+Det är också en skillnad mellan **lösenordshashning** och att använda en hash för exempelvis filintegritet eller jämförelse av innehåll. Vi ska välja metod efter vilket problem vi vill lösa.
+
+### Att kryptera lagrad information
+
+MySQL har också funktioner för symmetrisk kryptering, exempelvis `AES_ENCRYPT()` och `AES_DECRYPT()`. Det visar att kryptering i vissa miljöer kan utföras av databashanteraren.
+
+Men valet av funktion räcker inte för att skapa ett säkert system. Vi behöver bland annat hantera **nycklar, krypteringsläge, initialiseringsvärden, integritetsskydd och åtkomst** på ett genomtänkt sätt. Vi bör inte bygga en egen kryptografisk lösning kring enstaka SQL-funktioner.
+
+I många applikationer är det lämpligt att utföra krypteringen med ett välunderhållet bibliotek **innan värdet skickas till databasen**. Då kan databasen lagra exempelvis krypterad binärdata tillsammans med den metadata som behövs för att senare kunna dekryptera den:
+
+| customer_id | encrypted_note | key_version |
+|---|---|---|
+| 1 | *(krypterad binärdata)* | 2 |
+
+Exemplet beskriver principen, inte en fullständig säker datamodell. Beroende på algoritm behöver vi också hantera exempelvis *nonce/IV* och autentiseringstagg. Nyckeln ska i möjligaste mån förvaras **separat från den krypterade informationen**, exempelvis i en avsedd nyckelhanteringstjänst.[^crypto-storage]
+
+[^crypto-storage]: Se [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html) för vägledning om kryptering i applikations-, databas- och lagringslager samt säker hantering av nycklar och krypteringslägen.
+
+Kryptering av enskilda fält är inte heller samma sak som kryptering av hela databasens lagringsfiler eller säkerhetskopior. De skyddar mot delvis olika hot.
+
+### När algoritmen eller nyckeln behöver bytas
+
+Kryptografiska skydd behöver kunna förändras. En algoritm kan få kända svagheter, en nyckel kan misstänkas vara röjd eller säkerhetskraven kan förändras.
+
+För **reversibelt krypterade data** kan vi, om vi fortfarande har tillgång till nyckeln och originalinformationen behöver bevaras:
+
+1. Identifiera vilken algoritm och nyckelversion som användes.
+2. Dekryptera uppgiften med den gamla nyckeln i en kontrollerad miljö.
+3. Kryptera om den med den nya algoritmen eller nyckeln.
+4. Kontrollera resultatet och avveckla det gamla skyddet när det är säkert att göra det.
+
+Under en övergång kan systemet behöva kunna läsa både gamla och nya format. Därför är **versionsinformation** en viktig del av datamodellen.
+
+I vissa system används *envelope encryption*: själva data krypteras med en datanyckel, som i sin tur skyddas med en separat nyckel. Då kan man ibland **kryptera om datanyckeln** med en ny överordnad nyckel utan att kryptera om alla datavärden. Om själva datanyckeln eller krypteringsalgoritmen måste bytas kan även innehållet behöva krypteras om.[^key-management]
+
+[^key-management]: Se [OWASP Key Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html). Att byta nyckel kräver även hänsyn till äldre säkerhetskopior, återställningsförmåga och hur gamla nycklar slutligen ska avvecklas.
+
+### När lösenordens skydd behöver ersättas
+
+För lösenordshashar fungerar inte metoden ovan: vi kan inte dekryptera en hash och sedan skapa ett nytt hashvärde av det ursprungliga lösenordet.
+
+En vanlig migreringsmetod är därför att **uppgradera hashvärdet vid en lyckad inloggning**:
+
+1. Läs den lagrade lösenordsrepresentationen och identifiera dess algoritm och parametrar.
+2. Verifiera användarens inmatade lösenord enligt den gamla metoden.
+3. Skapa en ny lösenordshash med den moderna metoden.
+4. Ersätt den gamla representationen.
+
+Men vad gör vi med användare som inte loggar in?
+
+Om det gamla skyddet är för svagt, eller misstänks ha komprometterats, kan vi behöva **ogiltigförklara de gamla autentiseringsuppgifterna** och kräva att berörda användare skapar nya lösenord genom en säker återställningsprocess.
+
+Vi ska också skilja mellan att skapa **en ny hash av samma lösenord** och att faktiskt **byta lösenord**. Om äldre hashvärden redan har stulits kan ett algoritmbyte inte göra de stulna värdena ogjorda; angriparen kan fortfarande försöka knäcka dem. Vid kompromettering kan nya lösenord, återkallade sessioner och andra incidentåtgärder behövas.
+
+Den här typen av förändringar bör planeras redan när autentiseringslösningen byggs. Systemet behöver exempelvis kunna hantera mer än ett lösenordsformat under en övergång utan att behålla osäkra format längre än nödvändigt.
+
+### Informationsvärdet och skyddets livslängd
+
+Det finns en viktig skillnad mellan **informationen vi behöver bevara** och **metoden vi använder för att skydda den**.
+
+En krypterad kunduppgift kan fortfarande ha ett giltigt användningsområde även om krypteringsalgoritmen blivit föråldrad. Då vill vi kanske bevara informationen men byta skydd.
+
+För ett lösenord är syftet inte att bevara den ursprungliga texten. Vi behöver i stället bevara eller återupprätta användarens **möjlighet att legitimera sig på ett säkert sätt**.
+
+Det innebär att ett väl utformat system ibland måste kunna **migrera information**, och ibland måste kunna **kassera gamla autentiseringsuppgifter**.
+
+Båda är exempel på att säkerhet också handlar om hur informationssystem kan förändras över tid.
+
 ### Personuppgifter och dataminimering
 
 I bokhandelns kundregister finns namn, e-postadress och kanske födelsedatum.
