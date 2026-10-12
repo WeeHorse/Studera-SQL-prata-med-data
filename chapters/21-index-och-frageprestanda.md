@@ -1,4 +1,4 @@
-# 21. Index och frågeprestanda
+# 21. Index och Query-prestanda
 
 När vi skriver en Query beskriver vi vilken information vi vill ha. Vi säger inte nödvändigtvis exakt **hur** databashanteraren ska hitta den.
 
