@@ -227,6 +227,19 @@ ORDER BY id
 LIMIT 3 OFFSET 2;
 ```
 
+I MySQL kan vi också skriva samma sak med två tal efter `LIMIT`:
+
+```sql
+SELECT *
+FROM customers
+ORDER BY id
+LIMIT 2, 3;
+```
+
+Det första talet anger **hur många rader vi hoppar över** och det andra anger **hur många rader vi hämtar**. Alltså är `LIMIT 2, 3` likvärdigt med `LIMIT 3 OFFSET 2`.
+
+Var uppmärksam på att talens ordning är omvänd mellan de två skrivsätten. Kommasyntaxen stöds även av SQLite, men inte av PostgreSQL. I den här boken föredrar vi normalt `LIMIT ... OFFSET ...` eftersom det tydligare visar vad talen betyder.
+
 `LIMIT` används i flera populära SQL-dialekter, men är inte den standardiserade syntaxen.[^limit]
 
 [^limit]: MySQL, PostgreSQL och SQLite använder `LIMIT`. Standard-SQL har bland annat `FETCH FIRST ... ROWS ONLY` och `OFFSET ... FETCH`. SQL Server har också `TOP`.
