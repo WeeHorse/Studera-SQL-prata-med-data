@@ -1,7 +1,7 @@
 # Studera SQL – prata med data
 
-Välkommen till bokprojektets publiceringsprototyp.
+Välkommen till webbversionen av boken.
 
-[Läs på svenska](/sv/chapters/01-vad-ar-en-databas)
+[Läs den svenska utgåvan](/sv/).
 
-Engelsk översättning följer i ett separat redaktionellt steg.
+Den engelska utgåvan publiceras efter redaktionell översättning.
