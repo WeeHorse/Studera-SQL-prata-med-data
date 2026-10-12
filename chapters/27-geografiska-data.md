@@ -97,8 +97,6 @@ VALUES (
 );
 ```
 
-Koordinaterna är ungefärliga och illustrativa. De anger ingen verklig butikslokal.
-
 `POINT` och `SRID` gör platsens representation tydligare än två fristående tal. Samtidigt behöver vi fortfarande veta **vad punkten representerar**: byggnadens mittpunkt, entrén eller exempelvis platsen där varor lämnas av.
 
 ### Att beräkna avstånd
@@ -182,6 +180,61 @@ Vi kan representera en zon som en polygon i stället för att bara lagra namnet 
 Men då behöver vi också välja hur gränsen ska definieras: administrativt område, postnummerområde eller den yta bokhandeln faktiskt levererar till.
 
 Det är återigen ett **modelleringsbeslut**, inte bara ett val av datatyp.
+
+### LINESTRING – en sträcka mellan flera punkter
+
+En punkt anger en position. En **LINESTRING** beskriver i stället en linje som går genom en följd av punkter.
+
+Anta att vi vill representera en sträcka mellan två platser. Den raka förbindelsen kan beskrivas med två koordinatpar:
+
+```sql
+SELECT ST_GeomFromText(
+    'LINESTRING(0 0, 4 0)'
+);
+```
+
+Men om en väg måste gå runt ett hinder kan den beskrivas med flera punkter:
+
+```sql
+SELECT ST_GeomFromText(
+    'LINESTRING(0 0, 1 2, 3 2, 4 0)'
+);
+```
+
+Vi kan föreställa oss skillnaden så här:
+
+```text
+Rak förbindelse:
+
+A --------------------- B
+
+Väg med omväg:
+
+        P2 -------- P3
+       /              \
+      /                \
+     A                  B
+```
+
+En `LINESTRING` består av raka delsträckor mellan koordinatparen. Den andra linjen blir därför längre än den raka förbindelsen mellan A och B.
+
+Vi kan också låta databasen beräkna längden med `ST_Length()`:
+
+```sql
+SELECT
+    ST_Length(
+        ST_GeomFromText('LINESTRING(0 0, 4 0)')
+    ) AS direct_length,
+    ST_Length(
+        ST_GeomFromText('LINESTRING(0 0, 1 2, 3 2, 4 0)')
+    ) AS route_length;
+```
+
+Här använder vi ett enkelt **plant koordinatsystem utan angivet geografiskt SRID**, där koordinatenheterna är godtyckliga. Resultaten blir `4` respektive ungefär `6.47` längdenheter. Det är alltså inte kilometer eller meter.
+
+För verkliga geografiska positioner behöver vi använda ett lämpligt koordinatreferenssystem och en längdberäkning som ger rätt måttenhet.
+
+En viktig skillnad återstår: även om vi ritar en `LINESTRING` som följer en väg vet databasen inte automatiskt vilka vägar som faktiskt går att köra på, vilka som är enkelriktade eller hur korsningar hänger ihop. För att hitta en verklig **kortaste eller snabbaste rutt** behöver vi även ett vägnät och regler för hur det får användas.
 
 ### Ligger punkten inom området?
 
