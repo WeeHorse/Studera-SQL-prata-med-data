@@ -1,4 +1,4 @@
-# 22. SQL från applikationer
+# 22. SQL i applikationer
 
 Hittills har vi skrivit SQL direkt mot bokhandelns databas. Vi har formulerat Queries, förändrat data och undersökt hur databashanteraren arbetar.
 
