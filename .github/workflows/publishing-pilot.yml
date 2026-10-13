@@ -1,7 +1,6 @@
 name: Build and publish book
 
 on:
-  pull_request:
   push:
     branches: [main]
   workflow_dispatch:
@@ -43,13 +42,11 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: .vitepress/dist
 
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
