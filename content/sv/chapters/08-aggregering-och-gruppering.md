@@ -60,7 +60,7 @@ FROM products;
 |---:|
 | 50 |
 
-Vi kan också beräkna sortimentets genomsnittliga pris med `AVG(price)`:
+Vi kan också beräkna sortimentets genomsnittliga pris med `SELECT AVG(price) AS average_price FROM products;`:
 
 | average_price |
 |---:|
