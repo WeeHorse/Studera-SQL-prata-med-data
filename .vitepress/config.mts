@@ -19,7 +19,7 @@ export default defineConfig({
       label: 'Svenska',
       lang: 'sv-SE',
       themeConfig: {
-        nav: [{ text: 'Start', link: '/sv/' }, { text: 'Om författaren', link: '/sv/om-forfattaren.html' }],
+        nav: [{ text: 'Start', link: '/sv/' }, { text: 'Kapitel 1', link: '/sv/chapters/01-vad-ar-en-databas.html' }],
         sidebar
       }
     }
