@@ -38,3 +38,10 @@ tr, figure { break-inside: avoid; }
 }
 .author-card h2 { margin: 0 0 2mm; font-size: 11pt; }
 .author-card p { margin: 0; font-size: 8pt; line-height: 1.36; }
+
+/* Titeluppgifter på inledningssidan, före den kompakta författarboxen. */
+.book-frontmatter { margin: 0 0 13mm; break-after: avoid; }
+.book-frontmatter h1 { break-before: auto; margin: 0; font: 700 22pt/1.1 Georgia, serif; }
+.book-frontmatter__subtitle { font: 14pt/1.25 Georgia, serif; margin: 2mm 0 6mm; }
+.book-frontmatter__byline { font: 9pt/1.4 Georgia, serif; margin: 0; }
+.book-frontmatter__eyebrow { display: none; }
