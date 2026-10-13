@@ -53,14 +53,9 @@ Att lägga till själva produkterna gör vi med `INSERT` i nästa kapitel.
 
 Vi känner redan till `INTEGER`, `VARCHAR` och `DECIMAL`. Nu använder vi dem för att bestämma vilka värden kolumnerna ska kunna representera.
 
-Exempelvis:
+Exempelvis betyder `VARCHAR(200)` att titeln är text och `DECIMAL(10, 2)` att priset lagras som ett exakt decimaltal.
 
-```sql
-title VARCHAR(200)
-price DECIMAL(10, 2)
-```
-
-Det betyder att titeln är text med högst 200 tecken och priset ett exakt decimaltal med tio siffrors precision och två decimalplatser.
+För titeln betyder det högst 200 tecken; för priset tio siffrors precision och två decimalplatser.
 
 Vi bör välja datatyp efter uppgiftens **betydelse**, inte bara efter hur den råkar skrivas. Ett postnummer kan exempelvis vara text trots att det består av siffror.
 
@@ -68,16 +63,7 @@ Vi bör välja datatyp efter uppgiftens **betydelse**, inte bara efter hur den r
 
 En produkt utan titel är kanske inte en giltig produkt i vår bokhandel.
 
-Vi kan därför ange att kolumnen inte får sakna värde:
-
-```sql
-CREATE TABLE products (
-    id INTEGER,
-    title VARCHAR(200) NOT NULL,
-    price DECIMAL(10, 2),
-    stock INTEGER
-);
-```
+Vi anger kravet direkt i kolumndefinitionen: `title VARCHAR(200) NOT NULL`.
 
 `NOT NULL` säger att kolumnen måste innehålla ett värde som inte är `NULL`.
 
@@ -87,16 +73,7 @@ Det betyder däremot inte att texten är meningsfull. En tom sträng `''` kan fo
 
 Vi har tidigare använt `id` för att hitta en bestämd kund eller produkt.
 
-När vi skapar tabellen kan vi ange att `id` är dess **primärnyckel**:
-
-```sql
-CREATE TABLE products (
-    id INTEGER PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    price DECIMAL(10, 2),
-    stock INTEGER
-);
-```
+När vi skapar tabellen kan vi ange att `id` är dess **primärnyckel**, med definitionen `id INTEGER PRIMARY KEY`.
 
 En primärnyckel identifierar varje rad. Dess värde ska vara unikt och får inte vara `NULL`.
 
@@ -106,16 +83,7 @@ Vi ska senare ägna ett helt kapitel åt nycklar och begränsningar. Här räcke
 
 Anta att vi registrerar en produkt men ännu inte har några exemplar av den i lager.
 
-Vi kan ange ett standardvärde för `stock`:
-
-```sql
-CREATE TABLE products (
-    id INTEGER PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock INTEGER NOT NULL DEFAULT 0
-);
-```
+Vi kan ange ett standardvärde direkt i kolumndefinitionen: `stock INTEGER NOT NULL DEFAULT 0`.
 
 `DEFAULT 0` betyder att databasen använder värdet noll när vi skapar en rad utan att ange något lagersaldo.
 
@@ -190,17 +158,7 @@ Men databasen kan inte automatiskt avgöra alla verksamhetsfrågor. Vad ett riml
 
 ### Kolumnbegränsningar och tabellbegränsningar
 
-Vi kan skriva vissa regler direkt efter en kolumn:
-
-```sql
-price DECIMAL(10, 2) NOT NULL
-```
-
-Andra regler kan stå som separata begränsningar:
-
-```sql
-CHECK (price >= 0)
-```
+Vissa regler, som `price DECIMAL(10, 2) NOT NULL`, skrivs direkt efter en kolumn. Andra, som `CHECK (price >= 0)`, kan stå som separata tabellbegränsningar.
 
 En tabellbegränsning kan även omfatta flera kolumner. Föreställ dig att vi längre fram registrerar både ett startdatum och ett slutdatum för en kampanj:
 
