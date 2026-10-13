@@ -106,18 +106,13 @@ MySQL har en särskild JSON-datatyp. Andra databassystem erbjuder andra variante
 
 I MySQL kan vi använda `JSON_EXTRACT()`:
 
-```sql
-SELECT
-    title,
-    JSON_EXTRACT(metadata, '$.language') AS language
-FROM products;
-```
+Uttrycket `JSON_EXTRACT(metadata, '$.language')` hämtar JSON-värdet för egenskapen `language`.
 
 Uttrycket `'$.language'` är en **JSON-sökväg** (*JSON path*).
 
 Tecknet `$` representerar hela JSON-värdet och `.language` anger egenskapen vi vill läsa.
 
-Vi kan också använda `JSON_UNQUOTE()` för att få ut textvärdet utan JSON-strängens citattecken:
+För att få ut ett vanligt textvärde utan JSON-strängens citattecken använder vi `JSON_UNQUOTE()` i en fullständig Query:
 
 ```sql
 SELECT
