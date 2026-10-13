@@ -22,14 +22,7 @@ Vi fortsätter med bokhandelns kunder. Vi har nu registrerat ytterligare några 
 | 4 | Beatrice | beatrice@example.com | 2000-02-15 |
 | 5 | Anna | anna@example.com | 1975-11-08 |
 
-Vi har redan sett hur vi kan hämta vissa kolumner:
-
-```sql
-SELECT name, email
-FROM customers;
-```
-
-För att välja *vilka rader* som ska komma med använder vi `WHERE`.
+Vi har redan sett att `SELECT` väljer kolumner. För att välja *vilka rader* som ska komma med använder vi `WHERE`.
 
 ### Villkor med WHERE
 
@@ -47,13 +40,7 @@ Resultat:
 
 `WHERE` följs av ett **villkor**. En rad kommer med i resultatet när villkoret är uppfyllt.
 
-Vi kan jämföra både tal och text:
-
-```sql
-SELECT name
-FROM customers
-WHERE name = 'Anna';
-```
+Vi kan jämföra både tal och text, exempelvis med villkoret `name = 'Anna'`.
 
 ### Jämförelseoperatorer
 
@@ -68,15 +55,7 @@ De vanligaste operatorerna är:
 | `>=` | Större än eller lika med |
 | `<=` | Mindre än eller lika med |
 
-Exempelvis:
-
-```sql
-SELECT name, birthday
-FROM customers
-WHERE birthday > '1970-01-09';
-```
-
-ger oss kunderna som är födda efter den 9 januari 1970.
+Villkoret `birthday > '1970-01-09'` väljer kunder födda efter den 9 januari 1970.
 
 När vi jämför textvärden behöver vi vanligtvis skriva värdet inom enkla citattecken, som i `name = 'Anna'`.
 
@@ -95,21 +74,9 @@ WHERE birthday >= '1980-01-01'
 
 Här måste **båda** villkoren vara uppfyllda. Vi får Olof och Anaïs, som är födda under perioden 1980–1999.
 
-Med `OR` räcker det att **minst ett** villkor är uppfyllt:
+Med `OR` räcker det att **minst ett** villkor är uppfyllt, som i `name = 'Anna' OR name = 'Olof'`.
 
-```sql
-SELECT *
-FROM customers
-WHERE name = 'Anna' OR name = 'Olof';
-```
-
-Vi kan också använda `NOT` för att förneka ett villkor:
-
-```sql
-SELECT *
-FROM customers
-WHERE NOT name = 'Olof';
-```
+Vi kan också använda `NOT` för att förneka ett villkor, exempelvis `NOT name = 'Olof'`.
 
 ### Söka inom ett intervall
 
@@ -121,16 +88,7 @@ FROM customers
 WHERE birthday BETWEEN '1980-01-01' AND '1999-12-31';
 ```
 
-Det motsvarar:
-
-```sql
-SELECT name, birthday
-FROM customers
-WHERE birthday >= '1980-01-01'
-  AND birthday <= '1999-12-31';
-```
-
-**Båda gränserna ingår** i `BETWEEN`.
+Det motsvarar villkoret `birthday >= '1980-01-01' AND birthday <= '1999-12-31'`. **Båda gränserna ingår** i `BETWEEN`.
 
 ### Söka bland flera värden
 
@@ -183,25 +141,14 @@ FROM customers
 ORDER BY name;
 ```
 
-För fallande ordning använder vi `DESC`:
+Vi kan variera sorteringen utan att ändra resten av frågan:
 
-```sql
-SELECT *
-FROM customers
-ORDER BY name DESC;
-```
+| Sortering | Betydelse |
+|---|---|
+| `ORDER BY name DESC` | Namn i fallande ordning |
+| `ORDER BY name, id` | Först namn, sedan id när namn är lika |
 
 `ASC` betyder stigande ordning och är normalt standardvalet.
-
-Vi kan också sortera på flera kolumner:
-
-```sql
-SELECT *
-FROM customers
-ORDER BY name, id;
-```
-
-Först sorterar vi på `name`. Om flera kunder har samma namn används `id` för att avgöra ordningen mellan dem.
 
 ### Begränsa antalet rader
 
@@ -218,25 +165,7 @@ LIMIT 3;
 
 Det ger de tre kunderna med lägst id.
 
-Vi kan också hoppa över de första två och sedan hämta tre:
-
-```sql
-SELECT *
-FROM customers
-ORDER BY id
-LIMIT 3 OFFSET 2;
-```
-
-I MySQL kan vi också skriva samma sak med två tal efter `LIMIT`:
-
-```sql
-SELECT *
-FROM customers
-ORDER BY id
-LIMIT 2, 3;
-```
-
-Det första talet anger **hur många rader vi hoppar över** och det andra anger **hur många rader vi hämtar**. Alltså är `LIMIT 2, 3` likvärdigt med `LIMIT 3 OFFSET 2`.
+Vill vi hoppa över de första två och sedan hämta tre byter vi sista raden mot `LIMIT 3 OFFSET 2`. I MySQL kan vi även skriva `LIMIT 2, 3`, där det första talet anger **hur många rader vi hoppar över** och det andra **hur många rader vi hämtar**.
 
 Var uppmärksam på att talens ordning är omvänd mellan de två skrivsätten. Kommasyntaxen stöds även av SQLite, men inte av PostgreSQL. I den här boken föredrar vi normalt `LIMIT ... OFFSET ...` eftersom det tydligare visar vad talen betyder.
 
@@ -260,17 +189,7 @@ LIMIT 3;
 
 Vi hämtar namn och e-postadress för de kunder vars namn börjar på B, sorterar dem alfabetiskt och tar högst tre rader.
 
-Notera ordningen:
-
-```sql
-SELECT ...
-FROM ...
-WHERE ...
-ORDER BY ...
-LIMIT ...;
-```
-
-Vi kommer att bygga vidare på den strukturen genom hela boken.
+Notera ordningen på klausulerna: `SELECT`, `FROM`, `WHERE`, `ORDER BY` och `LIMIT`. Vi kommer att bygga vidare på den strukturen genom hela boken.
 
 ## Avancerat
 
@@ -289,16 +208,7 @@ Anta att vi har adresser där vissa uppgifter ännu inte är registrerade.
 
 `NULL` betyder att det saknas ett känt värde. Det är inte samma sak som noll eller en tom textsträng.
 
-Vi kan inte söka efter `NULL` med vanlig likhet:
-
-```sql
--- Detta fungerar inte som avsett
-SELECT *
-FROM addresses
-WHERE street = NULL;
-```
-
-Vi använder i stället `IS NULL`:
+Vi kan inte söka efter `NULL` med vanlig likhet: `WHERE street = NULL` fungerar inte som avsett. Vi använder i stället `IS NULL`:
 
 ```sql
 SELECT *
@@ -306,13 +216,7 @@ FROM addresses
 WHERE street IS NULL;
 ```
 
-Och för att hitta de adresser där gatan är registrerad:
-
-```sql
-SELECT *
-FROM addresses
-WHERE street IS NOT NULL;
-```
+För att hitta adresser där gatan är registrerad använder vi `WHERE street IS NOT NULL`.
 
 Varför? I SQL kan ett jämförelseuttryck vara **sant**, **falskt** eller **okänt**. En jämförelse med `NULL` ger normalt det tredje alternativet.
 
@@ -329,14 +233,7 @@ WHERE name = 'Anna'
    OR name = 'Olof' AND id > 2;
 ```
 
-`AND` har högre prioritet än `OR`. Frågan betyder därför:
-
-```sql
-SELECT *
-FROM customers
-WHERE name = 'Anna'
-   OR (name = 'Olof' AND id > 2);
-```
+`AND` har högre prioritet än `OR`. Frågan betyder därför `name = 'Anna' OR (name = 'Olof' AND id > 2)`.
 
 Vill vi något annat behöver vi sätta parenteserna själva:
 
@@ -351,14 +248,7 @@ Parenteser är ofta värdefulla även när de inte är tekniskt nödvändiga. De
 
 ### DISTINCT – bara unika resultat
 
-Vi kanske vill veta i vilka städer våra kunder har registrerade adresser.
-
-```sql
-SELECT city
-FROM addresses;
-```
-
-Då kan samma stad förekomma flera gånger.
+Vi kanske vill veta i vilka städer våra kunder har registrerade adresser. Med `SELECT city FROM addresses` kan samma stad förekomma flera gånger.
 
 Om vi bara vill ha varje stad en gång:
 
@@ -383,15 +273,7 @@ Det tar vi upp mer utförligt när vi arbetar med prestanda och applikationer.
 
 ### Hur bör vi jämföra text?
 
-Vi har skrivit frågor som:
-
-```sql
-SELECT *
-FROM customers
-WHERE name = 'Anna';
-```
-
-Men ska `Anna` och `anna` räknas som samma namn? Hur ska `Å`, `Ä` och `Ö` sorteras?
+Vi har använt villkoret `name = 'Anna'`. Men ska `Anna` och `anna` räknas som samma namn? Hur ska `Å`, `Ä` och `Ö` sorteras?
 
 Det beror på språkregler och vilka inställningar som används för att jämföra text, ofta kallade **kollationer** (*collations*).
 
