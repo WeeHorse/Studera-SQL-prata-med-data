@@ -72,10 +72,7 @@ I vårt exempel är villkoret att adressens `customer_id` ska motsvara kundens `
 
 Vi har tidigare sett hur vi ger tabeller kortare namn:
 
-```sql
-FROM customers AS c
-INNER JOIN addresses AS a
-```
+`FROM customers AS c INNER JOIN addresses AS a`
 
 När vi skriver `c.name` menar vi kolumnen `name` i tabellen som vi kallar `c`. `a.city` pekar på kolumnen `city` i `a`.
 
@@ -87,16 +84,7 @@ Utan prefixet skulle `SELECT id` vara tvetydigt i en fråga där båda tabellern
 
 Nu vill vi veta vilka kunder som har en adress i Storfors.
 
-```sql
-SELECT
-    c.name,
-    a.street,
-    a.city
-FROM customers AS c
-INNER JOIN addresses AS a
-    ON a.customer_id = c.id
-WHERE a.city = 'Storfors';
-```
+Vi använder samma `INNER JOIN` som ovan och lägger till villkoret `WHERE a.city = 'Storfors'`.
 
 | name | street | city |
 |---|---|---|
