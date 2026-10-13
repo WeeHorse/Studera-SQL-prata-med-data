@@ -22,3 +22,5 @@ import { withBase } from 'vitepress'
 [Börja läsa – Kapitel 1](/sv/chapters/01-vad-ar-en-databas.html)
 
 [Ladda ner boken som A5-PDF](/downloads/studera-sql-sv-a5.pdf)
+
+[Bilaga: ladda ner bokhandelns exempeldatabas](/sv/bilaga-exempeldatabas.html)
