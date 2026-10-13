@@ -20,6 +20,6 @@ export function preparePrint() {
   if (items.length !== 29) throw new Error('Förväntade 29 kapitel, fann ' + items.length);
   mkdirSync('dist/generated', { recursive: true });
   writeFileSync('dist/generated/book-sv.md',
-    [readFileSync('publishing/print/author.md', 'utf8').trim(), ...items.map(item => item.source.trim())].join('\n\n') + '\n');
+    [readFileSync('publishing/print/author.md', 'utf8').trim(), ...items.map(item => item.source.trim()), readFileSync('publishing/print/appendix-database.md', 'utf8').trim()].join('\n\n') + '\n');
   return items;
 }
