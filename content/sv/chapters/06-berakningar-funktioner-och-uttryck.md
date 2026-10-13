@@ -21,9 +21,7 @@ Men `SELECT` kan också innehålla **uttryck**. Ett uttryck är något som datab
 
 Vi kan börja helt utan en tabell:
 
-```sql
-SELECT 10 + 5;
-```
+Vi kan exempelvis skriva `SELECT 10 + 5;`.
 
 Resultatet blir `15`.
 
@@ -38,9 +36,7 @@ Vi kan använda vanliga räkneoperatorer:
 
 Precis som i vanlig matematik kan vi använda parenteser för att styra beräkningen:
 
-```sql
-SELECT (100 + 50) * 2;
-```
+Med parenteser kan vi styra beräkningsordningen: `SELECT (100 + 50) * 2;`.
 
 ### Beräkningar med kolumner
 
