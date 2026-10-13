@@ -24,16 +24,7 @@ Vi börjar med bokhandelns produkter:
 | 4 | Små historier | 120.00 | 25 | 2 |
 | 5 | Mellan raderna | 180.00 | 9 | 2 |
 
-Vi har tidigare beräknat lagervärdet för en produkt genom att multiplicera `price` med `stock`:
-
-```sql
-SELECT
-    title,
-    price * stock AS inventory_value
-FROM products;
-```
-
-Om vi vill använda samma beräkning som ett eget mellanresultat kan vi skriva:
+Vi har tidigare beräknat en produkts lagervärde med uttrycket `price * stock`. Om vi vill använda beräkningen som ett namngivet mellanresultat kan vi skriva:
 
 ```sql
 WITH product_values AS (
@@ -62,20 +53,16 @@ En CTE skapar normalt inte någon bestående tabell eller View. Namnet finns til
 
 ### Filtrera ett mellanresultat
 
-Vi kan fortsätta arbeta med det beräknade värdet:
+Vi kan fortsätta arbeta med det beräknade värdet. Då behåller vi definitionen av `product_values` ovan, men byter den avslutande delen mot:
 
 ```sql
-WITH product_values AS (
-    SELECT
-        title,
-        price * stock AS inventory_value
-    FROM products
-)
 SELECT title, inventory_value
 FROM product_values
 WHERE inventory_value > 2000
 ORDER BY inventory_value DESC;
 ```
+
+Kodstycket är alltså **slutet på samma Query**, inte en fristående SQL-sats.
 
 | title | inventory_value |
 |---|---:|
@@ -136,20 +123,9 @@ Nu vill vi också visa produkttypernas namn.
 | 1 | Roman |
 | 2 | Novellsamling |
 
+Vi behåller de båda CTE:erna `product_values` och `type_values` från föregående exempel. För att visa typnamnet ändrar vi bara den avslutande Queryn:
+
 ```sql
-WITH product_values AS (
-    SELECT
-        product_type_id,
-        price * stock AS inventory_value
-    FROM products
-),
-type_values AS (
-    SELECT
-        product_type_id,
-        SUM(inventory_value) AS total_value
-    FROM product_values
-    GROUP BY product_type_id
-)
 SELECT
     t.name AS product_type,
     v.total_value
@@ -158,6 +134,9 @@ INNER JOIN product_types AS t
     ON t.id = v.product_type_id
 ORDER BY v.total_value DESC;
 ```
+
+Även detta är **avslutningen på samma WITH-sats**; de två CTE-definitionerna står kvar ovanför.
+
 
 | product_type | total_value |
 |---|---:|
