@@ -1,5 +1,4 @@
 <header class="book-frontmatter">
-  <p class="book-frontmatter__eyebrow">Studera SQL</p>
   <h1>Studera SQL</h1>
   <p class="book-frontmatter__subtitle">Prata med data</p>
   <p class="book-frontmatter__byline">Benjamin Berglund · 2026</p>
