@@ -30,3 +30,9 @@
   .author-card { grid-template-columns: 95px 1fr; gap: .75rem; padding: .65rem 0; }
   .author-card__copy p { font-size: .82rem; }
 }
+
+/* Samlade bokuppgifter ovanför författarpresentationen. */
+.book-frontmatter { margin: 1.5rem 0 2rem; }
+.book-frontmatter h1 { margin: 0 0 .2rem; padding: 0; border: 0; font-size: clamp(1.9rem, 4vw, 2.8rem); }
+.book-frontmatter__subtitle { margin: 0 0 1rem; font-size: 1.25rem; color: var(--vp-c-text-2); }
+.book-frontmatter__byline { margin: 0; font-size: .9rem; color: var(--vp-c-text-2); }
