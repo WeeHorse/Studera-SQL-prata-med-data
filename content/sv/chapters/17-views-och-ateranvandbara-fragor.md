@@ -33,9 +33,7 @@ Vi börjar med två tabeller vi redan känner:
 
 Vi vet redan hur en `JOIN` kan hämta produktens titel tillsammans med namnet på dess typ.
 
-denna Query fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
-
-Då kan vi skapa en View:
+Om vi vill återanvända samma Query i flera rapporter och applikationer kan vi skapa en View:
 
 ```sql
 CREATE VIEW product_overview AS
