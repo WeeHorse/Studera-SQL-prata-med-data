@@ -31,19 +31,7 @@ Vi börjar med två tabeller vi redan känner:
 | 1 | Roman |
 | 2 | Novellsamling |
 
-Vi vet hur vi kan hämta produktens titel tillsammans med namnet på dess typ:
-
-```sql
-SELECT
-    p.id,
-    p.title,
-    p.price,
-    p.stock,
-    t.name AS product_type
-FROM products AS p
-INNER JOIN product_types AS t
-    ON p.product_type_id = t.id;
-```
+Vi vet redan hur en `JOIN` kan hämta produktens titel tillsammans med namnet på dess typ.
 
 denna Query fungerar, men vi kanske vill återanvända den i flera rapporter och applikationer.
 
