@@ -17,3 +17,31 @@ code { font-family: ui-monospace, monospace; }
 table { font-size: 8pt; border-collapse: collapse; width: 100%; }
 td,th { border-bottom: 0.2pt solid #999; padding: 2pt; }
 tr, figure { break-inside: avoid; }
+
+/* Kompakt författarruta i bokens inledning. */
+.author-card {
+  display: grid;
+  grid-template-columns: 31mm 1fr;
+  gap: 4mm;
+  padding: 3mm 0;
+  border-top: .3pt solid #aab5c0;
+  border-bottom: .3pt solid #aab5c0;
+  break-inside: avoid;
+  margin-bottom: 6mm;
+}
+.author-card img {
+  display: block;
+  width: 31mm;
+  height: 42mm;
+  object-fit: cover;
+  object-position: 50% 24%;
+}
+.author-card h2 { margin: 0 0 2mm; font-size: 11pt; }
+.author-card p { margin: 0; font-size: 8pt; line-height: 1.36; }
+
+/* Titeluppgifter på inledningssidan, före den kompakta författarboxen. */
+.book-frontmatter { margin: 0 0 13mm; break-after: avoid; }
+.book-frontmatter h1 { break-before: auto; margin: 0; font: 700 22pt/1.1 Georgia, serif; }
+.book-frontmatter__subtitle { font: 14pt/1.25 Georgia, serif; margin: 2mm 0 6mm; }
+.book-frontmatter__byline { font: 9pt/1.4 Georgia, serif; margin: 0; }
+.book-frontmatter__eyebrow { display: none; }
