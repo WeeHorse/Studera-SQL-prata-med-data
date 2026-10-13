@@ -52,20 +52,11 @@ Exemplet visar grundprincipen. I en verklig applikation ska lösenord och andra 
 
 ### Att köra en Query
 
-Vi vill hämta bokhandelns tillgängliga produkter:
-
-```sql
-SELECT id, title, price
-FROM products
-WHERE stock > 0
-ORDER BY title;
-```
-
-Från C# kan vi skicka samma Query till databasen:
+Vi vill hämta bokhandelns tillgängliga produkter. Från C# kan vi skicka en vanlig SQL-Query till databasen:
 
 ```csharp
 await using var command = new MySqlCommand("""
-    SELECT id, title, price
+    SELECT title
     FROM products
     WHERE stock > 0
     ORDER BY title;
@@ -75,11 +66,7 @@ await using var reader = await command.ExecuteReaderAsync();
 
 while (await reader.ReadAsync())
 {
-    int id = reader.GetInt32("id");
-    string title = reader.GetString("title");
-    decimal price = reader.GetDecimal("price");
-
-    Console.WriteLine($"{id}: {title} – {price} kr");
+    Console.WriteLine(reader.GetString("title"));
 }
 ```
 
@@ -103,21 +90,16 @@ Problemet är att ett värde från användaren då riskerar att bli en del av **
 Vi ska i stället använda **parametriserade Queries**:
 
 ```csharp
-await using var command = new MySqlCommand("""
-    SELECT title, price
-    FROM products
-    WHERE id = @productId;
-    """, connection);
+await using var command = new MySqlCommand(
+    "SELECT title FROM products WHERE id = @productId",
+    connection);
 
 command.Parameters.AddWithValue("@productId", productId);
 
-await using var reader = await command.ExecuteReaderAsync();
-
-if (await reader.ReadAsync())
-{
-    Console.WriteLine(reader.GetString("title"));
-}
+var title = await command.ExecuteScalarAsync();
 ```
+
+Här hämtar `ExecuteScalarAsync()` ett enda värde. I ett verkligt program behöver vi även hantera att ingen produkt hittades.
 
 Här antar vi att `productId` redan är ett heltal som applikationen har tagit emot och validerat.
 
@@ -140,11 +122,9 @@ Men parametrar kan normalt användas för *värden*, inte för godtyckliga tabel
 När bokhandeln ändrar ett lagersaldo använder applikationen en annan typ av kommando:
 
 ```csharp
-await using var command = new MySqlCommand("""
-    UPDATE products
-    SET stock = stock + @quantity
-    WHERE id = @productId;
-    """, connection);
+await using var command = new MySqlCommand(
+    "UPDATE products SET stock = stock + @quantity WHERE id = @productId",
+    connection);
 
 command.Parameters.AddWithValue("@quantity", 5);
 command.Parameters.AddWithValue("@productId", 1);
@@ -186,11 +166,10 @@ await using var transaction =
 
 try
 {
-    await using var command = new MySqlCommand("""
-        UPDATE products
-        SET stock = stock - @quantity
-        WHERE id = @productId AND stock >= @quantity;
-        """, connection, transaction);
+    await using var command = new MySqlCommand(
+        "UPDATE products SET stock = stock - @quantity " +
+        "WHERE id = @productId AND stock >= @quantity",
+        connection, transaction);
 
     command.Parameters.AddWithValue("@quantity", 2);
     command.Parameters.AddWithValue("@productId", 1);
@@ -198,9 +177,7 @@ try
     int changedRows = await command.ExecuteNonQueryAsync();
 
     if (changedRows != 1)
-    {
-        throw new InvalidOperationException("Otillräckligt lagersaldo.");
-    }
+        throw new InvalidOperationException("Lageravdraget misslyckades.");
 
     // Här skulle fler förändringar som hör till köpet utföras
     // inom samma transaktion.
@@ -214,7 +191,7 @@ catch
 }
 ```
 
-Detta är fortfarande **inte en komplett beställningsprocess**. I ett verkligt köp behöver vi dessutom registrera beställningen, säkerställa rätt priser och hantera fel som uppstår under eller efter commit.
+Detta är fortfarande **inte en komplett beställningsprocess**. I ett verkligt köp behöver vi dessutom registrera beställningen, säkerställa rätt priser och hantera fel som uppstår under eller efter commit. Ett misslyckat lageravdrag kan bero på flera saker, exempelvis att produkten saknas eller att lagret inte räcker.
 
 Det avgörande är att varje kommando som hör till transaktionen använder **samma anslutning och samma transaktion**.
 
