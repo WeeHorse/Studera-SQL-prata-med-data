@@ -2,7 +2,7 @@
 
 <div class="author-card">
   <div class="author-card__portrait">
-    <img src="/images/benjamin-berglund.jpg" alt="Porträtt av Benjamin Berglund" />
+    <img src="../images/benjamin-berglund.jpg" alt="Porträtt av Benjamin Berglund" />
   </div>
   <div class="author-card__copy">
     <h2>Om författaren</h2>
