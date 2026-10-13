@@ -53,9 +53,7 @@ Att lägga till själva produkterna gör vi med `INSERT` i nästa kapitel.
 
 Vi känner redan till `INTEGER`, `VARCHAR` och `DECIMAL`. Nu använder vi dem för att bestämma vilka värden kolumnerna ska kunna representera.
 
-Exempelvis betyder `VARCHAR(200)` att titeln är text och `DECIMAL(10, 2)` att priset lagras som ett exakt decimaltal.
-
-För titeln betyder det högst 200 tecken; för priset tio siffrors precision och två decimalplatser.
+`VARCHAR(200)` tillåter en titel med högst 200 tecken, medan `DECIMAL(10, 2)` representerar ett exakt decimaltal med totalt tio siffror, varav två decimalplatser.
 
 Vi bör välja datatyp efter uppgiftens **betydelse**, inte bara efter hur den råkar skrivas. Ett postnummer kan exempelvis vara text trots att det består av siffror.
 
