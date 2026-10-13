@@ -2,7 +2,11 @@
 import { withBase } from 'vitepress'
 </script>
 
-# Om författaren
+<div class="book-frontmatter">
+  <h1>Studera SQL</h1>
+  <p class="book-frontmatter__subtitle">Prata med data</p>
+  <p class="book-frontmatter__byline">Benjamin Berglund · 2026</p>
+</div>
 
 <div class="author-card">
   <div class="author-card__portrait">
