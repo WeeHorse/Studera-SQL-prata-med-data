@@ -36,3 +36,60 @@
 .book-frontmatter h1 { margin: 0 0 .2rem; padding: 0; border: 0; font-size: clamp(1.9rem, 4vw, 2.8rem); }
 .book-frontmatter__subtitle { margin: 0 0 1rem; font-size: 1.25rem; color: var(--vp-c-text-2); }
 .book-frontmatter__byline { margin: 0; font-size: .9rem; color: var(--vp-c-text-2); }
+
+
+/* IBM:s tidiga forskningsrapporter inspirerar typografin, inte en kopierad logotyp.
+   Framsidans innehåll är HTML och kan väljas, läsas och skalas. */
+.sql-cover {
+  box-sizing: border-box;
+  aspect-ratio: 148 / 210;
+  width: min(100%, 500px);
+  min-height: 540px;
+  margin: 1.5rem auto 2rem;
+  padding: clamp(1.3rem, 5%, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  color: #171715;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(59,49,31,.009) 3px 4px),
+    linear-gradient(115deg,#f5f1e7,#f0ebdf 56%,#f8f5ec);
+  border: 1px solid #d8d0bc;
+  box-shadow: 0 5px 22px rgba(0,0,0,.12);
+  font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+}
+.sql-cover p { margin: 0; }
+.sql-cover__eyebrow, .sql-cover__author, .sql-cover__footer,
+.sql-cover__example { font-family: "Courier New", Courier, monospace; }
+.sql-cover__eyebrow { font-size: clamp(.7rem, 2.4vw, .95rem); letter-spacing: .09em; }
+.sql-cover__heading { margin-top: 1rem; width: 100%; }
+.sql-cover h1 {
+  font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  letter-spacing: -.055em;
+  line-height: 1.04;
+  white-space: nowrap;
+  margin: 0 0 .75rem;
+  padding: 0;
+  border: 0;
+  color: inherit;
+}
+.sql-cover__subtitle { font-size: clamp(1.25rem, 4vw, 2rem); font-weight: 700; }
+.sql-cover__author { font-size: clamp(.85rem, 2.5vw, 1.15rem); }
+.sql-cover__example { text-align: left; max-width: 100%; }
+.sql-cover__example-label { text-align: center; font-size: .68rem; margin-bottom: .75rem !important; }
+.sql-cover__example pre {
+  padding: 1rem 1.15rem;
+  margin: 0;
+  border: 1px dashed #282824;
+  background: transparent !important;
+  color: inherit;
+  font: clamp(.63rem, 2vw, .98rem)/1.5 "Courier New", Courier, monospace;
+  white-space: pre;
+  overflow-x: auto;
+}
+.sql-cover__footer { font-size: clamp(.65rem, 2vw, .85rem); line-height: 1.7; }
+@media (max-width: 420px) { .sql-cover { min-height: 440px; } }
+@media (prefers-reduced-motion: reduce) { .sql-cover { scroll-behavior: auto; } }
