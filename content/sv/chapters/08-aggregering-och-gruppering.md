@@ -60,12 +60,7 @@ FROM products;
 |---:|
 | 50 |
 
-Vi kan också beräkna sortimentets genomsnittliga pris:
-
-```sql
-SELECT AVG(price) AS average_price
-FROM products;
-```
+Vi kan också beräkna sortimentets genomsnittliga pris med `AVG(price)`:
 
 | average_price |
 |---:|
@@ -304,18 +299,7 @@ När vi senare arbetar med fönsterfunktioner kommer vi dessutom att kunna visa 
 
 Vår ursprungliga produkttabell beskriver **produkter**.
 
-Men frågan:
-
-```sql
-SELECT
-    product_type_id,
-    COUNT(*) AS product_count,
-    SUM(stock) AS total_stock
-FROM products
-GROUP BY product_type_id;
-```
-
-beskriver i stället **produkttypernas sammanlagda sortiment och lager**.
+Men vår tidigare Query med `GROUP BY product_type_id`, `COUNT(*)` och `SUM(stock)` beskriver i stället **produkttypernas sammanlagda sortiment och lager**.
 
 Vi har skapat en ny representation av redan lagrade data, med en annan betydelse för varje rad.
 
