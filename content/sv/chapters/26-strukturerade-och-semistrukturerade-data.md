@@ -104,7 +104,7 @@ MySQL har en särskild JSON-datatyp. Andra databassystem erbjuder andra variante
 
 ### Att läsa en egenskap från JSON
 
-I MySQL kan vi använda `JSON_EXTRACT()`:
+I MySQL använder vi `JSON_EXTRACT()` för att läsa en egenskap.
 
 Uttrycket `JSON_EXTRACT(metadata, '$.language')` hämtar JSON-värdet för egenskapen `language`.
 
