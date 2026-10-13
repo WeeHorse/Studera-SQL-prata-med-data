@@ -98,13 +98,7 @@ WHERE id = 2;
 
 Här letar vi efter kunden vars `id` är `2`. Som vi såg i förra kapitlet använder vi primärnyckeln för att identifiera en bestämd post.
 
-Vi kan också jämföra text:
-
-```sql
-SELECT *
-FROM customers
-WHERE name = 'Olof';
-```
+Vi kan också jämföra text med villkoret `WHERE name = 'Olof'`.
 
 Textvärden skrivs inom enkla citattecken. Tal skrivs normalt utan citattecken.
 
@@ -132,19 +126,7 @@ Vi ska arbeta mer med `INSERT`, `UPDATE` och `DELETE` längre fram. Tills vidare
 
 ### Läsbar SQL
 
-SQL behöver inte skrivas med stora bokstäver:
-
-```sql
-select name from customers;
-```
-
-Men vi kommer att skriva SQL:s nyckelord med stora bokstäver och dela upp längre frågor på flera rader:
-
-```sql
-SELECT name, email
-FROM customers
-WHERE id = 2;
-```
+SQL behöver inte skrivas med stora bokstäver: `select name from customers;` fungerar också. Vi skriver ändå SQL:s nyckelord med stora bokstäver och delar upp längre frågor på flera rader, som i exemplet med `WHERE id = 2` tidigare i kapitlet.
 
 Det gör frågorna lättare att läsa, särskilt när de blir mer komplicerade.
 
@@ -170,15 +152,7 @@ SQL är i huvudsak ett **deklarativt språk**.
 
 Det betyder att vi talar om *vad* vi vill få fram, medan databashanteraren bestämmer *hur* informationen ska hittas.
 
-När vi skriver:
-
-```sql
-SELECT name
-FROM customers
-WHERE id = 2;
-```
-
-beskriver vi vårt önskade resultat. Vi säger inte att databashanteraren ska läsa rad ett, sedan rad två och därefter sluta.
+När vi skriver `SELECT name FROM customers WHERE id = 2` beskriver vi vårt önskade resultat. Vi säger inte att databashanteraren ska läsa rad ett, sedan rad två och därefter sluta.
 
 Databashanteraren kan välja mellan olika sätt att hitta informationen, exempelvis med hjälp av ett index. Vi ska undersöka detta senare i boken.
 

@@ -24,14 +24,7 @@ Vi har redan kundernas födelsedatum i tabellen `customers`:
 | 4 | Beatrice | 2000-02-15 |
 | 5 | Anna | 1975-11-08 |
 
-Vi kan hämta alla födelsedatum:
-
-```sql
-SELECT name, birthday
-FROM customers;
-```
-
-Vi kan också jämföra dem:
+Vi kan hämta namn och födelsedatum med `SELECT name, birthday FROM customers`. Vi kan också jämföra datumen:
 
 ```sql
 SELECT name, birthday
@@ -55,13 +48,7 @@ ORDER BY birthday;
 
 Nu kommer den äldsta kunden först.
 
-Vill vi i stället ha den yngsta först använder vi `DESC`:
-
-```sql
-SELECT name, birthday
-FROM customers
-ORDER BY birthday DESC;
-```
+Vill vi i stället ha den yngsta först använder vi `ORDER BY birthday DESC`.
 
 ### Datumintervall
 
@@ -134,11 +121,7 @@ Det skulle visa de senast registrerade kunderna först.
 
 ### Aktuell tidpunkt
 
-`CURRENT_TIMESTAMP` ger ett aktuellt datum- och tidsvärde:
-
-```sql
-SELECT CURRENT_TIMESTAMP;
-```
+`CURRENT_TIMESTAMP` ger ett aktuellt datum- och tidsvärde, exempelvis med `SELECT CURRENT_TIMESTAMP;`.
 
 Det är användbart om vi exempelvis vill registrera när något inträffade.
 

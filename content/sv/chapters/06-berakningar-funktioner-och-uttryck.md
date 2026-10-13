@@ -19,11 +19,7 @@ FROM customers;
 
 Men `SELECT` kan också innehålla **uttryck**. Ett uttryck är något som databasen kan beräkna till ett värde.
 
-Vi kan börja helt utan en tabell:
-
-```sql
-SELECT 10 + 5;
-```
+Vi kan börja helt utan en tabell, med `SELECT 10 + 5;`.
 
 Resultatet blir `15`.
 
@@ -36,11 +32,7 @@ Vi kan använda vanliga räkneoperatorer:
 | `*` | Multiplikation |
 | `/` | Division |
 
-Precis som i vanlig matematik kan vi använda parenteser för att styra beräkningen:
-
-```sql
-SELECT (100 + 50) * 2;
-```
+Precis som i vanlig matematik kan vi styra beräkningsordningen med parenteser: `SELECT (100 + 50) * 2;`.
 
 ### Beräkningar med kolumner
 
