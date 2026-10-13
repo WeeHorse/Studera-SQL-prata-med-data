@@ -19,8 +19,8 @@ test('publiceringskapitlen är bokbyggets aktuella källor', () => {
   for (const c of items) {
     assert.equal(c.source, readFileSync('content/sv/chapters/' + c.name, 'utf8'),
       c.name + ': avvikelse från publiceringskällan');
-    assert.match(c.title, /^\\d+\\.\\s+\\S+/,
-      c.name + ': kapitelrubriken saknar nummer eller titel');
+    assert.ok(c.title.startsWith(Number(c.id) + '. '),
+      c.name + ': kapitelrubriken saknar rätt nummer');
     assert.ok(c.url.startsWith('/sv/chapters/'), c.name + ': fel URL');
   }
 });
