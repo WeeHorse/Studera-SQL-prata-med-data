@@ -66,6 +66,45 @@ assert_eq "Kapitel 11: INTERSECT" 1 "SELECT GROUP_CONCAT(customer_id ORDER BY cu
 assert_eq "Kapitel 11: EXCEPT" '2,5' "SELECT GROUP_CONCAT(customer_id ORDER BY customer_id) FROM (SELECT customer_id FROM quality_test_addresses WHERE city = 'Storfors' EXCEPT SELECT customer_id FROM quality_test_addresses WHERE city = 'Malmö') AS ids;"
 query "DROP TABLE quality_test_addresses;"
 
+# Kapitel 12–16: kopiera schema och data före ändringar. Originaltabellerna påverkas inte.
+query "CREATE TABLE quality_test_products LIKE products;"
+query "INSERT INTO quality_test_products SELECT * FROM products;"
+assert_eq "Kapitel 15: ursprungligt lagersaldo" 12 "SELECT stock FROM quality_test_products WHERE id = 1;"
+query "UPDATE quality_test_products SET stock = stock + 5 WHERE id = 1;"
+assert_eq "Kapitel 15: UPDATE ökar saldo" 17 "SELECT stock FROM quality_test_products WHERE id = 1;"
+query "INSERT INTO quality_test_products (id, title, price, product_type_id) VALUES (7, 'Om databaser', 225.00, 1);"
+assert_eq "Kapitel 15: DEFAULT ger noll i lager" 0 "SELECT stock FROM quality_test_products WHERE id = 7;"
+query "DELETE FROM quality_test_products WHERE id = 7;"
+assert_eq "Kapitel 15: DELETE tar bort raden" 0 "SELECT COUNT(*) FROM quality_test_products WHERE id = 7;"
+query "ALTER TABLE quality_test_products ADD COLUMN isbn VARCHAR(20);"
+assert_eq "Kapitel 16: ny kolumn ger NULL" 5 "SELECT COUNT(*) FROM quality_test_products WHERE isbn IS NULL;"
+query "UPDATE quality_test_products SET isbn = '9781234567897' WHERE id = 1;"
+assert_eq "Kapitel 16: UPDATE kompletterar ISBN" 1 "SELECT COUNT(*) FROM quality_test_products WHERE id = 1 AND isbn = '9781234567897';"
+query "ALTER TABLE quality_test_products ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE;"
+assert_eq "Kapitel 16: befintliga rader aktiva" 5 "SELECT COUNT(*) FROM quality_test_products WHERE is_active = TRUE;"
+query "ALTER TABLE quality_test_products RENAME COLUMN title TO product_title;"
+assert_eq "Kapitel 16: namnändring" 1 "SELECT COUNT(*) FROM quality_test_products WHERE product_title = 'Vägen hem';"
+query "CREATE VIEW quality_test_catalog AS SELECT id, product_title AS title, price FROM quality_test_products;"
+assert_eq "Kapitel 16: View bevarar gammalt gränssnitt" 'Vägen hem' "SELECT title FROM quality_test_catalog WHERE id = 1;"
+query "DROP VIEW quality_test_catalog;"
+query "DROP TABLE quality_test_products;"
+
+# Kapitel 20: START TRANSACTION, COMMIT och ROLLBACK körs i varsin MySQL-session.
+# Observera att en separat query() öppnar en NY anslutning; håll transaktionsstegen ihop.
+assert_eq "Kapitel 20: ROLLBACK återställer lagret" 12 "START TRANSACTION; UPDATE products SET stock = stock - 2 WHERE id = 1 AND stock >= 2; ROLLBACK; SELECT stock FROM products WHERE id = 1;"
+assert_eq "Kapitel 20: COMMIT bevarar ändring" 10 "START TRANSACTION; UPDATE products SET stock = stock - 2 WHERE id = 1 AND stock >= 2; COMMIT; SELECT stock FROM products WHERE id = 1;"
+query "UPDATE products SET stock = 12 WHERE id = 1;"
+assert_eq "Kapitel 20: grundsaldo återställt" 12 "SELECT stock FROM products WHERE id = 1;"
+
+# Kapitel 21: indexets existens testas, INTE optimerarens val av exekveringsplan.
+query "CREATE INDEX idx_quality_products_title ON products (title);"
+query "CREATE INDEX idx_quality_products_type_price ON products (product_type_id, price);"
+assert_eq "Kapitel 21: titelindex finns" 1 "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'products' AND index_name = 'idx_quality_products_title';"
+assert_eq "Kapitel 21: sammansatt index har två kolumner" 2 "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'products' AND index_name = 'idx_quality_products_type_price';"
+query "EXPLAIN SELECT id, title, price FROM products WHERE title = 'Vägen hem';" >/dev/null
+query "DROP INDEX idx_quality_products_title ON products;"
+query "DROP INDEX idx_quality_products_type_price ON products;"
+
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
