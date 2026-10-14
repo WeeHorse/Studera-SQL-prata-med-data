@@ -106,6 +106,44 @@ query "DROP INDEX idx_quality_products_title ON products;"
 # Behåll stödindexet för FOREIGN KEY; hela testdatabasen återställs vid nästa körning.
 # InnoDB kan ha valt detta sammansatta index som stöd för products.product_type_id.
 
+# Kapitel 25: originalfilen har en historisk orderrad; visa och testa båda scenarierna.
+assert_eq "Kapitel 25: beställt värde ur grunddata" 249.00 "SELECT SUM(quantity * unit_price) FROM order_items;"
+assert_eq "Kapitel 25: ordermånad" '2026-10' "SELECT DATE_FORMAT(o.ordered_at, '%Y-%m') FROM orders o JOIN order_items oi ON oi.order_id=o.id GROUP BY DATE_FORMAT(o.ordered_at, '%Y-%m');"
+query "CREATE VIEW quality_test_product_sales AS SELECT product_id, SUM(quantity) AS units_ordered, SUM(quantity * unit_price) AS ordered_value FROM order_items GROUP BY product_id;"
+assert_eq "Kapitel 25: analys-View och historiskt pris" 'Vinterljus' "SELECT p.title FROM quality_test_product_sales s JOIN products p ON p.id=s.product_id WHERE s.ordered_value=249.00;"
+query "DROP VIEW quality_test_product_sales;"
+# Kapiteltexten har tre illustrativa orderrader – håll dem åtskilda från grundfilens enda.
+query "CREATE TABLE quality_test_order_items AS SELECT * FROM order_items WHERE 1=0;"
+query "INSERT INTO quality_test_order_items (id,order_id,product_id,quantity,unit_price) VALUES (1001,101,1,2,200.00),(1002,102,4,1,120.00),(1003,102,5,2,180.00);"
+assert_eq "Kapitel 25: illustrativa orderrader" '101,102' "SELECT GROUP_CONCAT(order_id ORDER BY order_id) FROM (SELECT order_id,SUM(quantity*unit_price) AS amount FROM quality_test_order_items GROUP BY order_id) x;"
+assert_eq "Kapitel 25: order 102 summa" 480.00 "SELECT SUM(quantity*unit_price) FROM quality_test_order_items WHERE order_id=102;"
+query "DROP TABLE quality_test_order_items;"
+
+# Kapitel 26: JSON-kolumn och genererad kolumn på isolerad kopia.
+query "CREATE TABLE quality_test_json_products LIKE products;"
+query "INSERT INTO quality_test_json_products SELECT * FROM products;"
+query "ALTER TABLE quality_test_json_products ADD COLUMN metadata JSON;"
+query 'UPDATE quality_test_json_products SET metadata = JSON_OBJECT("language","sv","pages",284,"series","Vägarna") WHERE id = 1;'
+assert_eq "Kapitel 26: JSON_EXTRACT och JSON_UNQUOTE" 'sv' "SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.language')) FROM quality_test_json_products WHERE id=1;"
+assert_eq "Kapitel 26: filtrering på JSON" 1 "SELECT COUNT(*) FROM quality_test_json_products WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.language')) = 'sv';"
+query "UPDATE quality_test_json_products SET metadata=JSON_SET(metadata, '$.pages', 286) WHERE id=1;"
+assert_eq "Kapitel 26: JSON_SET ändrar sidantal" 286 "SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.pages')) FROM quality_test_json_products WHERE id=1;"
+query "ALTER TABLE quality_test_json_products ADD COLUMN language_code VARCHAR(10) GENERATED ALWAYS AS (JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.language'))) STORED;"
+query "CREATE INDEX idx_quality_json_language ON quality_test_json_products (language_code);"
+assert_eq "Kapitel 26: genererad kolumn och index" 1 "SELECT COUNT(*) FROM quality_test_json_products WHERE language_code='sv';"
+query "DROP TABLE quality_test_json_products;"
+
+# Kapitel 27: kontrollera både plana linjer och geografiska punkter (WGS 84).
+assert_eq "Kapitel 27: rak linje har längd fyra" 4 "SELECT ST_Length(ST_GeomFromText('LINESTRING(0 0, 4 0)'));"
+assert_eq "Kapitel 27: omväg är längre" 1 "SELECT ST_Length(ST_GeomFromText('LINESTRING(0 0, 1 2, 3 2, 4 0)')) > 6;"
+query "CREATE TABLE quality_test_stores (id INTEGER PRIMARY KEY, name VARCHAR(100) NOT NULL, location POINT NOT NULL SRID 4326);"
+query "INSERT INTO quality_test_stores (id,name,location) VALUES (1,'Bokhandeln Malmö',ST_GeomFromText('POINT(13.003 55.605)',4326,'axis-order=long-lat'));"
+assert_eq "Kapitel 27: punktens koordinatsystem" 4326 "SELECT ST_SRID(location) FROM quality_test_stores WHERE id=1;"
+assert_eq "Kapitel 27: butik på sökpunkt ger noll meter" 0 "SELECT ST_Distance_Sphere(location,ST_GeomFromText('POINT(13.003 55.605)',4326,'axis-order=long-lat')) FROM quality_test_stores WHERE id=1;"
+assert_eq "Kapitel 27: butik inom tio kilometer" 1 "SELECT COUNT(*) FROM quality_test_stores WHERE ST_Distance_Sphere(location,ST_GeomFromText('POINT(13.003 55.605)',4326,'axis-order=long-lat')) <= 10000;"
+query "CREATE SPATIAL INDEX idx_quality_stores_location ON quality_test_stores (location);"
+assert_eq "Kapitel 27: spatialt index skapas" 1 "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='quality_test_stores' AND index_name='idx_quality_stores_location';"
+query "DROP TABLE quality_test_stores;"
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
