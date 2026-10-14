@@ -145,6 +145,38 @@ assert_eq "Kapitel 27: butik inom tio kilometer" 1 "SELECT COUNT(*) FROM quality
 query "CREATE SPATIAL INDEX idx_quality_stores_location ON quality_test_stores (location);"
 assert_eq "Kapitel 27: spatialt index skapas" 1 "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='quality_test_stores' AND index_name='idx_quality_stores_location';"
 query "DROP TABLE quality_test_stores;"
+# Blockvis verifiering av tidiga kapitel, med samma SQL-uttryck som i texten.
+# Kapitel 3: SQL-introduktion. Syntaxmallen och kommentarexemplet testas inte.
+assert_eq "Kapitel 3: namn från customers" 5 "SELECT COUNT(*) FROM (SELECT name FROM customers) AS q;"
+assert_eq "Kapitel 3: WHERE id 2" 'Olof' "SELECT name FROM customers WHERE id = 2;"
+assert_eq "Kapitel 3: alias" 'Benjamin' "SELECT customer_name FROM (SELECT name AS customer_name FROM customers) q WHERE customer_name='Benjamin';"
+assert_eq "Kapitel 3: koppling via WHERE" 4 "SELECT COUNT(*) FROM customers AS c, addresses AS a WHERE a.customer_id = c.id;"
+
+# Kapitel 5: filtrering, kombination av villkor och NULL.
+assert_eq "Kapitel 5: födda 1980-1999" 2 "SELECT COUNT(*) FROM customers WHERE birthday >= '1980-01-01' AND birthday < '2000-01-01';"
+assert_eq "Kapitel 5: BETWEEN ger samma urval" 2 "SELECT COUNT(*) FROM customers WHERE birthday BETWEEN '1980-01-01' AND '1999-12-31';"
+assert_eq "Kapitel 5: IN" 3 "SELECT COUNT(*) FROM customers WHERE id IN (1,3,5);"
+assert_eq "Kapitel 5: LIKE B" 2 "SELECT COUNT(*) FROM customers WHERE name LIKE 'B%';"
+assert_eq "Kapitel 5: LIMIT tre" '1,2,3' "SELECT GROUP_CONCAT(id ORDER BY id) FROM (SELECT id FROM customers ORDER BY id LIMIT 3) q;"
+assert_eq "Kapitel 5: saknad gatuadress" 1 "SELECT COUNT(*) FROM addresses WHERE street IS NULL;"
+assert_eq "Kapitel 5: operatorprioritet AND före OR" 1 "SELECT COUNT(*) FROM customers WHERE name = 'Anna' OR name = 'Olof' AND id > 2;"
+assert_eq "Kapitel 5: parenteser förändrar urval" 1 "SELECT COUNT(*) FROM customers WHERE (name = 'Anna' OR name = 'Olof') AND id > 2;"
+
+# Kapitel 6: beräkningar, CASE och funktioner.
+assert_eq "Kapitel 6: ROUND" 12.35 "SELECT ROUND(12.345,2);"
+assert_eq "Kapitel 6: CONCAT" 'Hej Anna' "SELECT CONCAT('Hej',' ','Anna');"
+assert_eq "Kapitel 6: UPPER" 'BOKHANDEL' "SELECT UPPER('bokhandel');"
+assert_eq "Kapitel 6: REPLACE" 'Din bok' "SELECT REPLACE('Min bok','Min','Din');"
+assert_eq "Kapitel 6: CASE slut i lager" 'Den blå staden' "SELECT title FROM products WHERE CASE WHEN stock > 0 THEN 'I lager' ELSE 'Slut i lager' END='Slut i lager';"
+assert_eq "Kapitel 6: COALESCE" 100 "SELECT COALESCE(NULL,100);"
+
+# Kapitel 7: statiska datumintervall och skillnader; rörliga datum testas ej mot fast svar.
+assert_eq "Kapitel 7: kunder födda efter 1980" 3 "SELECT COUNT(*) FROM customers WHERE birthday > '1980-01-01';"
+assert_eq "Kapitel 7: 1990-talet med BETWEEN" 'Anaïs' "SELECT name FROM customers WHERE birthday BETWEEN '1990-01-01' AND '1999-12-31';"
+assert_eq "Kapitel 7: 1990-talet halvöppet" 'Anaïs' "SELECT name FROM customers WHERE birthday >= '1990-01-01' AND birthday < '2000-01-01';"
+assert_eq "Kapitel 7: halvöppet orderintervall" 1 "SELECT COUNT(*) FROM orders WHERE ordered_at >= '2026-10-01' AND ordered_at < '2026-11-01';"
+assert_eq "Kapitel 7: DATEDIFF" 10 "SELECT DATEDIFF('2026-10-11','2026-10-01');"
+
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
