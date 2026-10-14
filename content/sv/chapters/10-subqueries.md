@@ -277,7 +277,7 @@ Här skapar den inre frågan ett **tabellformat resultat**, som den yttre fråga
 
 Vi ger det tillfälliga resultatet aliaset `summary`.
 
-Vi hade också kunnat lösa just detta med `HAVING`, som vi såg i föregående kapitel. Men exemplet visar hur vi kan bygga vidare på ett mellanresultat.
+Vi hade också kunnat lösa just detta med `HAVING`, som vi introducerade i kapitel 8. Men exemplet visar hur vi kan bygga vidare på ett mellanresultat.
 
 En sådan konstruktion kallas ibland en *derived table* eller härledd tabell.
 
