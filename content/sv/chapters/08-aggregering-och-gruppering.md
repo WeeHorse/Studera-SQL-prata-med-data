@@ -12,7 +12,7 @@ En sammanfattning kan göra stora mängder information begripliga. Men den inneb
 
 ### Flera rader blir ett resultat
 
-Vi fortsätter med bokhandelns produkter. Vi lägger till en produkt i vår tabell:
+Vi fortsätter med bokhandelns fem produkter, som också ingår i den nedladdningsbara exempeldatabasen:
 
 **products**
 
