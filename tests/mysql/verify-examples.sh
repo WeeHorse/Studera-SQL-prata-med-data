@@ -49,6 +49,52 @@ assert_eq "Unika städer" 3 "SELECT COUNT(DISTINCT city) FROM addresses;"
 assert_eq "CTE: största lagervärdet" 'Små historier' "WITH product_values AS (SELECT title, price*stock AS inventory_value FROM products) SELECT title FROM product_values WHERE inventory_value > 2000 ORDER BY inventory_value DESC LIMIT 1;"
 assert_eq "Ordrader och historiskt pris" 249.00 "SELECT SUM(quantity * unit_price) FROM order_items;"
 
+# Fortsatt kapitelkontroll: subqueries, Views och fönsterfunktioner.
+assert_eq "Kapitel 10: över genomsnittspris" 
+assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
+assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
+assert_rejected "Primärnyckel stoppar dubbla id" "INSERT INTO customers(id,name) VALUES (1,'Dublett');"
+assert_eq "Grunddata oförändrade" 5 "SELECT COUNT(*) FROM products;"
+
+echo "Alla MySQL-integrationstester godkända."
+Vägen hem\\nVinterljus' "SELECT title FROM products WHERE price > (SELECT AVG(price) FROM products) ORDER BY id;"
+assert_eq "Kapitel 19: ROW_NUMBER efter pris" 
+assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
+assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
+assert_rejected "Primärnyckel stoppar dubbla id" "INSERT INTO customers(id,name) VALUES (1,'Dublett');"
+assert_eq "Grunddata oförändrade" 5 "SELECT COUNT(*) FROM products;"
+
+echo "Alla MySQL-integrationstester godkända."
+Vinterljus\\t1\\nVägen hem\\t2\\nMellan raderna\\t3\\nDen blå staden\\t4\\nSmå historier\\t5' "SELECT title, ROW_NUMBER() OVER (ORDER BY price DESC, id) AS price_position FROM products ORDER BY price_position;"
+assert_eq "Kapitel 19: genomsnitt per produkttyp" 
+assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
+assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
+assert_rejected "Primärnyckel stoppar dubbla id" "INSERT INTO customers(id,name) VALUES (1,'Dublett');"
+assert_eq "Grunddata oförändrade" 5 "SELECT COUNT(*) FROM products;"
+
+echo "Alla MySQL-integrationstester godkända."
+1\\t199.666667\\n2\\t150.000000' "SELECT product_type_id, AVG(price) FROM products GROUP BY product_type_id ORDER BY product_type_id;"
+query "CREATE VIEW quality_test_product_overview AS SELECT p.id, p.title, t.name AS product_type FROM products AS p JOIN product_types AS t ON t.id = p.product_type_id;"
+assert_eq "Kapitel 17: View med relation" 
+assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
+assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
+assert_rejected "Primärnyckel stoppar dubbla id" "INSERT INTO customers(id,name) VALUES (1,'Dublett');"
+assert_eq "Grunddata oförändrade" 5 "SELECT COUNT(*) FROM products;"
+
+echo "Alla MySQL-integrationstester godkända."
+Roman\\t3\\nNovellsamling\\t2' "SELECT product_type, COUNT(*) FROM quality_test_product_overview GROUP BY product_type ORDER BY COUNT(*) DESC;"
+query "DROP VIEW quality_test_product_overview;"
+
+# Kapitel 11 presenterar tre extra adresser som INTE ingår i grundfilen.
+# Lägg dem i en separat testtabell, så att bokens nedladdningsbara data lämnas orörda.
+query "CREATE TABLE quality_test_addresses AS SELECT * FROM addresses;"
+query "INSERT INTO quality_test_addresses (id, customer_id, street, postal_code, city) VALUES (5,1,'Strandgatan 7',NULL,'Malmö'), (6,4,'Torget 3',NULL,'Malmö'), (7,5,'Skolgatan 8',NULL,'Storfors');"
+assert_eq "Kapitel 11: UNION" '1,2,3,4,5' "SELECT GROUP_CONCAT(customer_id ORDER BY customer_id) FROM (SELECT customer_id FROM quality_test_addresses WHERE city = 'Storfors' UNION SELECT customer_id FROM quality_test_addresses WHERE city = 'Malmö') AS ids;"
+assert_eq "Kapitel 11: UNION ALL behåller sex rader" 6 "SELECT COUNT(*) FROM (SELECT customer_id FROM quality_test_addresses WHERE city = 'Storfors' UNION ALL SELECT customer_id FROM quality_test_addresses WHERE city = 'Malmö') AS ids;"
+assert_eq "Kapitel 11: INTERSECT" 1 "SELECT GROUP_CONCAT(customer_id ORDER BY customer_id) FROM (SELECT customer_id FROM quality_test_addresses WHERE city = 'Storfors' INTERSECT SELECT customer_id FROM quality_test_addresses WHERE city = 'Malmö') AS ids;"
+assert_eq "Kapitel 11: EXCEPT" '2,5' "SELECT GROUP_CONCAT(customer_id ORDER BY customer_id) FROM (SELECT customer_id FROM quality_test_addresses WHERE city = 'Storfors' EXCEPT SELECT customer_id FROM quality_test_addresses WHERE city = 'Malmö') AS ids;"
+query "DROP TABLE quality_test_addresses;"
+
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
