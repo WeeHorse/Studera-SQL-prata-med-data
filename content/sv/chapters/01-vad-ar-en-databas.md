@@ -96,7 +96,7 @@ Skillnaden mellan databasen och databashanteraren kan jämföras med skillnaden 
 
 Anta att bokhandeln har en databas med tusentals kunder.
 
-Vi kanske vill veta vilka kunder som bor i Hemmavan, eller vilka som har ett efternamn som börjar med B.
+Vi kanske vill veta vilka adresser som finns i Hemmavan, eller vilka kunder som har ett efternamn som börjar med B.
 
 Vi skulle kunna läsa igenom alla poster manuellt, men det vore knappast praktiskt.
 
@@ -106,7 +106,7 @@ Med SQL kan en sådan fråga se ut så här:
 
 ```sql
 SELECT *
-FROM customers
+FROM addresses
 WHERE city = 'Hemmavan';
 ```
 

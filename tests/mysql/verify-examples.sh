@@ -35,6 +35,7 @@ assert_rejected() {
 }
 
 # Samma grunddata som i kapitel 5, 8, 9, 10 och 14.
+assert_eq "Kapitel 1: adresser i Hemmavan" 1 "SELECT COUNT(*) FROM addresses WHERE city = 'Hemmavan';"
 assert_eq "Fem kunder" 5 "SELECT COUNT(*) FROM customers;"
 assert_eq "Fem produkter" 5 "SELECT COUNT(*) FROM products;"
 assert_eq "50 exemplar" 50 "SELECT SUM(stock) FROM products;"
