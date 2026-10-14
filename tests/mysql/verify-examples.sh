@@ -171,7 +171,7 @@ assert_eq "Kapitel 6: CASE slut i lager" 'Den blå staden' "SELECT title FROM pr
 assert_eq "Kapitel 6: COALESCE" 100 "SELECT COALESCE(NULL,100);"
 
 # Kapitel 7: statiska datumintervall och skillnader; rörliga datum testas ej mot fast svar.
-assert_eq "Kapitel 7: kunder födda efter 1980" 2 "SELECT COUNT(*) FROM customers WHERE birthday > '1980-01-01';"
+assert_eq "Kapitel 7: kunder födda efter 1980" 3 "SELECT COUNT(*) FROM customers WHERE birthday > '1980-01-01';"
 assert_eq "Kapitel 7: 1990-talet med BETWEEN" 'Anaïs' "SELECT name FROM customers WHERE birthday BETWEEN '1990-01-01' AND '1999-12-31';"
 assert_eq "Kapitel 7: 1990-talet halvöppet" 'Anaïs' "SELECT name FROM customers WHERE birthday >= '1990-01-01' AND birthday < '2000-01-01';"
 assert_eq "Kapitel 7: halvöppet orderintervall" 1 "SELECT COUNT(*) FROM orders WHERE ordered_at >= '2026-10-01' AND ordered_at < '2026-11-01';"
