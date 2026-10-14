@@ -211,6 +211,47 @@ assert_rejected "Kapitel 14: unik författarordning" "INSERT INTO quality_test_a
 assert_rejected "Kapitel 14: positiv författarordning" "INSERT INTO quality_test_author_links VALUES (2,2,0);"
 query "DROP TABLE quality_test_author_links;"
 
+# Fördjupning kapitel 15–21: kompletterar tidigare DML/DDL/transaction/index-tester.
+# Kapitel 15: förändringar i kopia av produkttabellen.
+query "CREATE TABLE quality_test_mutations LIKE products;"
+query "INSERT INTO quality_test_mutations SELECT * FROM products;"
+query "UPDATE quality_test_mutations SET price=210.00,stock=15 WHERE id=1;"
+assert_eq "Kapitel 15: UPDATE flera kolumner" '210.00:15' "SELECT CONCAT(price,':',stock) FROM quality_test_mutations WHERE id=1;"
+query "INSERT INTO quality_test_mutations (id,title,price,product_type_id) VALUES (7,'Ny titel',199.00,1);"
+assert_eq "Kapitel 15: implicit DEFAULT stock" 0 "SELECT stock FROM quality_test_mutations WHERE id=7;"
+query "DELETE FROM quality_test_mutations WHERE id=7;"
+assert_eq "Kapitel 15: DELETE begränsad med WHERE" 5 "SELECT COUNT(*) FROM quality_test_mutations;"
+query "DROP TABLE quality_test_mutations;"
+
+# Kapitel 17: vy som exponerar begränsat urval och aggregering.
+query "CREATE VIEW quality_test_available_products AS SELECT id,title,price,stock FROM products WHERE stock>0;"
+assert_eq "Kapitel 17: tillgängliga produkter via View" 4 "SELECT COUNT(*) FROM quality_test_available_products;"
+query "DROP VIEW quality_test_available_products;"
+
+# Kapitel 18: flera namngivna CTE-steg och separat fixtur för rekursion.
+assert_eq "Kapitel 18: CTE lagervärde per typ" '2:4620.00,1:3396.00' "WITH product_values AS (SELECT product_type_id,price*stock AS inventory_value FROM products), type_values AS (SELECT product_type_id,SUM(inventory_value) AS total_value FROM product_values GROUP BY product_type_id) SELECT GROUP_CONCAT(CONCAT(product_type_id,':',total_value) ORDER BY total_value DESC) FROM type_values;"
+assert_eq "Kapitel 18: CTE större än genomsnittligt lagervärde" 'Vägen hem,Små historier' "WITH product_values AS (SELECT title,price*stock AS inventory_value FROM products), average_value AS (SELECT AVG(inventory_value) AS average_inventory_value FROM product_values) SELECT GROUP_CONCAT(p.title ORDER BY p.inventory_value) FROM product_values p CROSS JOIN average_value a WHERE p.inventory_value>a.average_inventory_value;"
+query "CREATE TABLE quality_test_categories (id INTEGER PRIMARY KEY,name VARCHAR(100) NOT NULL,parent_id INTEGER NULL);"
+query "INSERT INTO quality_test_categories VALUES (1,'Böcker',NULL),(2,'Skönlitteratur',1),(3,'Roman',2),(4,'Facklitteratur',1);"
+assert_eq "Kapitel 18: rekursiv CTE" 'Böcker:0,Facklitteratur:1,Skönlitteratur:1,Roman:2' "WITH RECURSIVE category_tree AS (SELECT id,name,parent_id,0 AS depth FROM quality_test_categories WHERE parent_id IS NULL UNION ALL SELECT c.id,c.name,c.parent_id,ct.depth+1 FROM quality_test_categories c JOIN category_tree ct ON c.parent_id=ct.id) SELECT GROUP_CONCAT(CONCAT(name,':',depth) ORDER BY depth,id) FROM category_tree;"
+query "DROP TABLE quality_test_categories;"
+
+# Kapitel 19: löpande summa, LAG och topprankad produkt i varje grupp.
+assert_eq "Kapitel 19: löpande lagersumma" 50 "SELECT running_stock FROM (SELECT id,SUM(stock) OVER (ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_stock FROM products) s ORDER BY id DESC LIMIT 1;"
+assert_eq "Kapitel 19: LAG föregående pris" 180.00 "SELECT previous_price FROM (SELECT id,LAG(price) OVER (ORDER BY price,id) AS previous_price FROM products) s WHERE id=1;"
+assert_eq "Kapitel 19: bäst rankad per typ" 'Vinterljus,Mellan raderna' "WITH ranked_products AS (SELECT title,product_type_id,price,ROW_NUMBER() OVER (PARTITION BY product_type_id ORDER BY price DESC,id) AS position_in_type FROM products) SELECT GROUP_CONCAT(title ORDER BY product_type_id) FROM ranked_products WHERE position_in_type=1;"
+
+# Kapitel 20: transaktion med order, orderrad och lagersaldo: allt återställs.
+assert_eq "Kapitel 20: orderexempel inne i återkallad transaktion" 10 "START TRANSACTION; INSERT INTO orders(id,customer_id,ordered_at) VALUES (102,2,'2026-10-12 11:00:00'); INSERT INTO order_items(id,order_id,product_id,quantity,unit_price) VALUES (1002,102,1,2,200.00); UPDATE products SET stock=stock-2 WHERE id=1 AND stock>=2; SELECT stock FROM products WHERE id=1; ROLLBACK;"
+assert_eq "Kapitel 20: ordern rullades tillbaka" 0 "SELECT COUNT(*) FROM orders WHERE id=102;"
+assert_eq "Kapitel 20: lagret rullades tillbaka" 12 "SELECT stock FROM products WHERE id=1;"
+
+# Kapitel 21: två indextyper samt exekverbar plan utan antagande om val.
+query "CREATE INDEX idx_quality_round4_title ON products (title);"
+assert_eq "Kapitel 21: titelindexets första kolumn" 'title' "SELECT column_name FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='products' AND index_name='idx_quality_round4_title' AND seq_in_index=1;"
+query "EXPLAIN SELECT id,title,price FROM products WHERE title='Vägen hem';" >/dev/null
+query "DROP INDEX idx_quality_round4_title ON products;"
+
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
