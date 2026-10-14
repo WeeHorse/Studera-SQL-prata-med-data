@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { chapters } from '../scripts/book-content.mjs';
 
 const items = chapters();
@@ -15,10 +15,12 @@ test('varje kapitel har Grund, Avancerat och Reflektion i rätt ordning', () => 
     assert.ok(positions[0] < positions[1] && positions[1] < positions[2], c.name + ': fel rubrikordning');
   }
 });
-test('svenska publiceringskapitel motsvarar ursprungskapitlen', () => {
-  const originals = readdirSync('chapters').filter(n => /^\d{2}-.*\.md$/.test(n)).sort();
-  assert.deepEqual(items.map(c => c.name).sort(), originals);
+test('publiceringskapitlen är bokbyggets aktuella källor', () => {
   for (const c of items) {
-    assert.equal(c.source, readFileSync('chapters/' + c.name, 'utf8'), c.name + ' skiljer sig från originalet');
+    assert.equal(c.source, readFileSync('content/sv/chapters/' + c.name, 'utf8'),
+      c.name + ': avvikelse från publiceringskällan');
+    assert.ok(c.title.startsWith(Number(c.id) + '. '),
+      c.name + ': kapitelrubriken saknar rätt nummer');
+    assert.ok(c.url.startsWith('/sv/chapters/'), c.name + ': fel URL');
   }
 });
