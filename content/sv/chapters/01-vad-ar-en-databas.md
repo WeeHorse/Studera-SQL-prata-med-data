@@ -96,7 +96,7 @@ Skillnaden mellan databasen och databashanteraren kan jämföras med skillnaden 
 
 Anta att bokhandeln har en databas med tusentals kunder.
 
-Vi kanske vill veta vilka kunder som bor i Hemmavan, eller vilka som har ett efternamn som börjar med B.
+Vi kanske vill veta vilka adresser som finns i Hemmavan, eller vilka kunder som har ett efternamn som börjar med B.
 
 Vi skulle kunna läsa igenom alla poster manuellt, men det vore knappast praktiskt.
 
@@ -105,10 +105,9 @@ I stället kan vi ställa en fråga till databasen.
 Med SQL kan en sådan fråga se ut så här:
 
 ```sql
-SELECT c.*
-FROM customers AS c
-JOIN addresses AS a ON a.customer_id = c.id
-WHERE a.city = 'Hemmavan';
+SELECT *
+FROM addresses
+WHERE city = 'Hemmavan';
 ```
 
 Vi behöver inte förstå syntaxen än. Det viktiga är att vi beskriver **vilken information vi vill ha**, snarare än hur databashanteraren ska leta efter den.
