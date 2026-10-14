@@ -103,7 +103,8 @@ assert_eq "Kapitel 21: titelindex finns" 1 "SELECT COUNT(*) FROM information_sch
 assert_eq "Kapitel 21: sammansatt index har två kolumner" 2 "SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = 'products' AND index_name = 'idx_quality_products_type_price';"
 query "EXPLAIN SELECT id, title, price FROM products WHERE title = 'Vägen hem';" >/dev/null
 query "DROP INDEX idx_quality_products_title ON products;"
-query "DROP INDEX idx_quality_products_type_price ON products;"
+# Behåll stödindexet för FOREIGN KEY; hela testdatabasen återställs vid nästa körning.
+# InnoDB kan ha valt detta sammansatta index som stöd för products.product_type_id.
 
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
