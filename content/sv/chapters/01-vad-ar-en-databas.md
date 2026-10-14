@@ -105,9 +105,10 @@ I stället kan vi ställa en fråga till databasen.
 Med SQL kan en sådan fråga se ut så här:
 
 ```sql
-SELECT *
-FROM customers
-WHERE city = 'Hemmavan';
+SELECT c.*
+FROM customers AS c
+JOIN addresses AS a ON a.customer_id = c.id
+WHERE a.city = 'Hemmavan';
 ```
 
 Vi behöver inte förstå syntaxen än. Det viktiga är att vi beskriver **vilken information vi vill ha**, snarare än hur databashanteraren ska leta efter den.
