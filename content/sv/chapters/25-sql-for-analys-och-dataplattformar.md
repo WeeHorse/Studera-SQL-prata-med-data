@@ -36,7 +36,7 @@ Detta är olika **användningsmönster**, inte två helt åtskilda former av SQL
 
 ### Från orderrader till omsättning
 
-Vi har tidigare introducerat en förenklad tabell `order_items`:
+Vi har tidigare introducerat en förenklad tabell `order_items`. Här använder vi ett **utökat, illustrativt orderunderlag med tre orderrader** för att visa beräkningarna. Den nedladdningsbara grunddatabasen innehåller ännu bara en historisk orderrad; tabellen nedan är alltså ett separat exempel:
 
 | id | order_id | product_id | quantity | unit_price |
 |---|---|---|---:|---:|
