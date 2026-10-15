@@ -252,6 +252,40 @@ assert_eq "Kapitel 21: titelindexets första kolumn" 'title' "SELECT column_name
 query "EXPLAIN SELECT id,title,price FROM products WHERE title='Vägen hem';" >/dev/null
 query "DROP INDEX idx_quality_round4_title ON products;"
 
+# Slutomgång kapitel 22–29: kvalitetsfrågor, hypotetisk referensdata och specialfall.
+# Kapitel 23 behörigheter kräver separata konton; kör inte CREATE USER/GRANT i denna svit.
+# Kapitel 24: datakvalitet, noll- och procentmått.
+assert_eq "Kapitel 24: kunder utan e-post" 0 "SELECT COUNT(*) FROM customers WHERE email IS NULL;"
+assert_eq "Kapitel 24: inga negativa lagersaldon" 0 "SELECT COUNT(*) FROM products WHERE stock<0;"
+assert_eq "Kapitel 24: ingen dubblett av e-post" 0 "SELECT COUNT(*) FROM (SELECT email FROM customers WHERE email IS NOT NULL GROUP BY email HAVING COUNT(*)>1) d;"
+assert_eq "Kapitel 24: fem kunder har e-post" '5:5' "SELECT CONCAT(COUNT(*),':',SUM(CASE WHEN email IS NOT NULL AND TRIM(email)<>'' THEN 1 ELSE 0 END)) FROM customers;"
+assert_eq "Kapitel 24: e-postfullständighet" 100 "SELECT CAST(ROUND(100.0*SUM(CASE WHEN email IS NOT NULL AND TRIM(email)<>'' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0),0) AS UNSIGNED) FROM customers;"
+query "CREATE TABLE quality_test_approved_prices (product_id INTEGER PRIMARY KEY,approved_price DECIMAL(10,2) NOT NULL);"
+query "INSERT INTO quality_test_approved_prices VALUES (1,200.00),(2,155.00);"
+assert_eq "Kapitel 24: avvikelse mot godkänt pris" 'Den blå staden' "SELECT p.title FROM products p JOIN quality_test_approved_prices r ON r.product_id=p.id WHERE p.price<>r.approved_price;"
+query "DROP TABLE quality_test_approved_prices;"
+
+# Kapitel 26: skilj saknad JSON-egenskap, explicit JSON null och SQL NULL.
+query "CREATE TABLE quality_test_json_nulls (id INTEGER PRIMARY KEY, metadata JSON NULL);"
+query "INSERT INTO quality_test_json_nulls VALUES (1,NULL),(2,JSON_OBJECT('pages',12)),(3,JSON_OBJECT('language',CAST('null' AS JSON)));"
+assert_eq "Kapitel 26: SQL NULL" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE metadata IS NULL;"
+assert_eq "Kapitel 26: saknad JSON-egenskap" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE id=2 AND JSON_CONTAINS_PATH(metadata,'one','$.language')=0;"
+assert_eq "Kapitel 26: explicit JSON null" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE id=3 AND JSON_CONTAINS_PATH(metadata,'one','$.language')=1 AND JSON_TYPE(JSON_EXTRACT(metadata,'$.language'))='NULL';"
+query "DROP TABLE quality_test_json_nulls;"
+
+# Kapitel 27: ST_Contains med planar SRID 0.
+query "CREATE TABLE quality_test_delivery_areas (id INTEGER PRIMARY KEY,name VARCHAR(100),boundary POLYGON NOT NULL);"
+query "INSERT INTO quality_test_delivery_areas VALUES (1,'Övningsområde',ST_GeomFromText('POLYGON((0 0,4 0,4 4,0 4,0 0))'));"
+assert_eq "Kapitel 27: inre punkt" 1 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(2 2)')) FROM quality_test_delivery_areas WHERE id=1;"
+assert_eq "Kapitel 27: punkt på gräns" 0 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(0 2)')) FROM quality_test_delivery_areas WHERE id=1;"
+query "DROP TABLE quality_test_delivery_areas;"
+
+# Kapitel 28: kör endast MySQL-syntax.
+assert_eq "Kapitel 28: över 200" 'Vinterljus' "SELECT title FROM products WHERE price>200 ORDER BY price DESC;"
+assert_eq "Kapitel 28: LIMIT OFFSET" 0 "SELECT COUNT(*) FROM (SELECT * FROM products LIMIT 5 OFFSET 10) p;"
+assert_eq "Kapitel 28: sorterat resultat" 'Vinterljus,Vägen hem,Mellan raderna,Den blå staden,Små historier' "SELECT GROUP_CONCAT(title ORDER BY sort_order) FROM (SELECT title,ROW_NUMBER() OVER (ORDER BY price DESC,id) AS sort_order FROM products ORDER BY price DESC,id LIMIT 5) p;"
+
+assert_eq "Kapitel 29: historiskt ordervärde" 249.00 "SELECT SUM(quantity*unit_price) FROM order_items;"
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
