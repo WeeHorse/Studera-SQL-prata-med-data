@@ -12,7 +12,7 @@ Nu ska vi kombinera **resultaten från flera frågor**. SQL har särskilda mäng
 
 ### Två Queries med samma slags resultat
 
-Vi fortsätter med kunderna och deras adresser. För att kunna undersöka överlappningar lägger vi till några adresser.
+Vi fortsätter med kunderna och deras adresser. För att kunna undersöka överlappningar tänker vi oss att vi lägger till tre adresser (id 5–7). De ingår inte i den nedladdningsbara grunddatabasen, utan är ett utökat exempel för det här kapitlet.
 
 **customers**
 
