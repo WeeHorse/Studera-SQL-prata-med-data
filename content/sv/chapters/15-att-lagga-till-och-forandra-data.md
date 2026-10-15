@@ -299,7 +299,7 @@ Om något går fel kan vi i en pågående transaktion använda `ROLLBACK` i stä
 
 [^transactions]: `START TRANSACTION` används i MySQL. Andra databassystem kan exempelvis använda `BEGIN`. Transaktionsstöd och exakt beteende beror också på databasens lagringsmotor och inställningar.
 
-Vi går igenom transaktioner, samtidighet och isolering på djupet i ett senare kapitel.
+Vi går igenom transaktioner, samtidighet och isolering på djupet i kapitel 20.
 
 ### Samtidiga uppdateringar
 
