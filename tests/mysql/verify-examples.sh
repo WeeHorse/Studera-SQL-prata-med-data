@@ -259,7 +259,7 @@ assert_eq "Kapitel 24: kunder utan e-post" 0 "SELECT COUNT(*) FROM customers WHE
 assert_eq "Kapitel 24: inga negativa lagersaldon" 0 "SELECT COUNT(*) FROM products WHERE stock<0;"
 assert_eq "Kapitel 24: ingen dubblett av e-post" 0 "SELECT COUNT(*) FROM (SELECT email FROM customers WHERE email IS NOT NULL GROUP BY email HAVING COUNT(*)>1) d;"
 assert_eq "Kapitel 24: fem kunder har e-post" '5:5' "SELECT CONCAT(COUNT(*),':',SUM(CASE WHEN email IS NOT NULL AND TRIM(email)<>'' THEN 1 ELSE 0 END)) FROM customers;"
-assert_eq "Kapitel 24: e-postfullständighet" 100.00000 "SELECT 100.0*SUM(CASE WHEN email IS NOT NULL AND TRIM(email)<>'' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0) FROM customers;"
+assert_eq "Kapitel 24: e-postfullständighet" 100 "SELECT CAST(ROUND(100.0*SUM(CASE WHEN email IS NOT NULL AND TRIM(email)<>'' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0),0) AS UNSIGNED) FROM customers;"
 query "CREATE TABLE quality_test_approved_prices (product_id INTEGER PRIMARY KEY,approved_price DECIMAL(10,2) NOT NULL);"
 query "INSERT INTO quality_test_approved_prices VALUES (1,200.00),(2,155.00);"
 assert_eq "Kapitel 24: avvikelse mot godkänt pris" 'Den blå staden' "SELECT p.title FROM products p JOIN quality_test_approved_prices r ON r.product_id=p.id WHERE p.price<>r.approved_price;"
