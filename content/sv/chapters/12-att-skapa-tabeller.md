@@ -47,7 +47,7 @@ Resultatet innehåller inga rader, men tabellen har fortfarande sina fyra kolumn
 
 Det är samma skillnad som mellan att bestämma vad en produkt *kan vara* och att faktiskt registrera en produkt.
 
-Att lägga till själva produkterna gör vi med `INSERT` i nästa kapitel.
+Att lägga till själva produkterna gör vi med `INSERT` i kapitel 15. Först ska vi fördjupa oss i nycklar, relationer och hur tabeller kan modelleras.
 
 ### Att välja rätt datatyper
 
