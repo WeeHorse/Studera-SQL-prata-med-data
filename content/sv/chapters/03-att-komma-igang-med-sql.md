@@ -102,7 +102,7 @@ Vi kan också jämföra text med villkoret `WHERE name = 'Olof'`.
 
 Textvärden skrivs inom enkla citattecken. Tal skrivs normalt utan citattecken.
 
-I nästa kapitel tittar vi närmare på villkor och hur vi kombinerar dem.
+I kapitel 5 tittar vi närmare på villkor och hur vi kombinerar dem. Först behöver vi förstå de datatyper och värden som villkoren jämför.
 
 ### SQL består av satser
 

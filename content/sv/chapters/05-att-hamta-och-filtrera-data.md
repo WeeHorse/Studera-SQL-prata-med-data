@@ -2,7 +2,7 @@
 
 Att ha mycket information är inte samma sak som att hitta det man behöver.
 
-En bokhandel kanske har tusentals kunder, men just nu behöver vi bara veta vilka som bor i en viss stad. Eller vilka kunder som har ett namn som börjar på B.
+En bokhandel kanske har tusentals kunder, men just nu behöver vi bara veta vilka som har ett namn som börjar på B. Eller vilka adresser som finns registrerade i en viss stad.
 
 Vi behöver kunna avgränsa informationen. Med SQL beskriver vi vilka uppgifter som är relevanta och låter databashanteraren hämta dem.
 

@@ -176,6 +176,7 @@ FROM products;
 | Den blå staden | 0 | Slut i lager |
 | Vinterljus | 4 | I lager |
 | Små historier | 25 | I lager |
+| Mellan raderna | 9 | I lager |
 
 `CASE` är ett **uttryck** som ger ett värde. Vi använder `WHEN` för att ange ett villkor, `THEN` för resultatet och `ELSE` för alternativet om inget villkor passar.
 
