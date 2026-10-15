@@ -214,7 +214,7 @@ Vi skriver ramen uttryckligen för att tydliggöra vad som räknas med.
 
 Det kan verka självklart att `ORDER BY` bestämmer vilka rader som räknas som tidigare och senare, men SQL skiljer mellan olika sätt att avgränsa ett fönster.
 
-Med `ROWS` räknar vi **fysiska positioner i den ordnade följden av resultatrader**.
+Med `ROWS` räknar vi **radpositioner i den ordning som fönstret anger**. Det handlar om ordningen i frågans resultat, inte om hur raderna är fysiskt lagrade i databasen.
 
 Med `RANGE` kan rader med samma sorteringsvärde behandlas som en grupp av likvärdiga rader.
 
