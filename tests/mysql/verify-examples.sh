@@ -267,33 +267,25 @@ query "DROP TABLE quality_test_approved_prices;"
 
 # Kapitel 26: skilj saknad JSON-egenskap, explicit JSON null och SQL NULL.
 query "CREATE TABLE quality_test_json_nulls (id INTEGER PRIMARY KEY, metadata JSON NULL);"
-query "INSERT INTO quality_test_json_nulls VALUES (1,NULL),(2,JSON_OBJECT('pages',12)),(3,JSON_OBJECT('language',JSON_EXTRACT('null','
-assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
-assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
-assert_rejected "Primärnyckel stoppar dubbla id" "INSERT INTO customers(id,name) VALUES (1,'Dublett');"
-assert_eq "Grunddata oförändrade" 5 "SELECT COUNT(*) FROM products;"
-
-echo "Alla MySQL-integrationstester godkända."
-)));"
+query "INSERT INTO quality_test_json_nulls VALUES (1,NULL),(2,JSON_OBJECT('pages',12)),(3,JSON_OBJECT('language',CAST('null' AS JSON)));"
 assert_eq "Kapitel 26: SQL NULL" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE metadata IS NULL;"
 assert_eq "Kapitel 26: saknad JSON-egenskap" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE id=2 AND JSON_CONTAINS_PATH(metadata,'one','$.language')=0;"
-assert_eq "Kapitel 26: JSON null finns som egenskap" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE id=3 AND JSON_CONTAINS_PATH(metadata,'one','$.language')=1 AND JSON_TYPE(JSON_EXTRACT(metadata,'$.language'))='NULL';"
+assert_eq "Kapitel 26: explicit JSON null" 1 "SELECT COUNT(*) FROM quality_test_json_nulls WHERE id=3 AND JSON_CONTAINS_PATH(metadata,'one','$.language')=1 AND JSON_TYPE(JSON_EXTRACT(metadata,'$.language'))='NULL';"
 query "DROP TABLE quality_test_json_nulls;"
 
-# Kapitel 27: ST_Contains och en punkt på polygonens gräns med planar SRID 0.
+# Kapitel 27: ST_Contains med planar SRID 0.
 query "CREATE TABLE quality_test_delivery_areas (id INTEGER PRIMARY KEY,name VARCHAR(100),boundary POLYGON NOT NULL);"
 query "INSERT INTO quality_test_delivery_areas VALUES (1,'Övningsområde',ST_GeomFromText('POLYGON((0 0,4 0,4 4,0 4,0 0))'));"
-assert_eq "Kapitel 27: polygonen innehåller inre punkt" 1 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(2 2)')) FROM quality_test_delivery_areas WHERE id=1;"
-assert_eq "Kapitel 27: ST_Contains utesluter gränsen" 0 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(0 2)')) FROM quality_test_delivery_areas WHERE id=1;"
+assert_eq "Kapitel 27: inre punkt" 1 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(2 2)')) FROM quality_test_delivery_areas WHERE id=1;"
+assert_eq "Kapitel 27: punkt på gräns" 0 "SELECT ST_Contains(boundary,ST_GeomFromText('POINT(0 2)')) FROM quality_test_delivery_areas WHERE id=1;"
 query "DROP TABLE quality_test_delivery_areas;"
 
-# Kapitel 28: endast MySQL-kompatibla exempel; TOP/OFFSET FETCH är SQL Server.
-assert_eq "Kapitel 28: produkt över 200" 'Vinterljus' "SELECT title FROM products WHERE price>200 ORDER BY price DESC;"
-assert_eq "Kapitel 28: LIMIT OFFSET på fem rader ger tomt" 0 "SELECT COUNT(*) FROM (SELECT * FROM products LIMIT 5 OFFSET 10) p;"
-assert_eq "Kapitel 28: sorterade fem produkter" 'Vinterljus,Vägen hem,Mellan raderna,Den blå staden,Små historier' "SELECT GROUP_CONCAT(title ORDER BY sort_order) FROM (SELECT title,ROW_NUMBER() OVER (ORDER BY price DESC,id) AS sort_order FROM products ORDER BY price DESC,id LIMIT 5) p;"
+# Kapitel 28: kör endast MySQL-syntax.
+assert_eq "Kapitel 28: över 200" 'Vinterljus' "SELECT title FROM products WHERE price>200 ORDER BY price DESC;"
+assert_eq "Kapitel 28: LIMIT OFFSET" 0 "SELECT COUNT(*) FROM (SELECT * FROM products LIMIT 5 OFFSET 10) p;"
+assert_eq "Kapitel 28: sorterat resultat" 'Vinterljus,Vägen hem,Mellan raderna,Den blå staden,Små historier' "SELECT GROUP_CONCAT(title ORDER BY sort_order) FROM (SELECT title,ROW_NUMBER() OVER (ORDER BY price DESC,id) AS sort_order FROM products ORDER BY price DESC,id LIMIT 5) p;"
 
-# Kapitel 29: totalsumman beror på historiska orderpriser, inte nuvarande pris.
-assert_eq "Kapitel 29: orderradernas värde" 249.00 "SELECT SUM(quantity*unit_price) FROM order_items;"
+assert_eq "Kapitel 29: historiskt ordervärde" 249.00 "SELECT SUM(quantity*unit_price) FROM order_items;"
 # Integritetsregler testas med rader som inte ska kunna läggas in.
 assert_rejected "CHECK stoppar negativa priser" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',-10,1,1);"
 assert_rejected "FOREIGN KEY stoppar okända produkttyper" "INSERT INTO products(id,title,price,stock,product_type_id) VALUES (99,'Otillåten',10,1,999);"
