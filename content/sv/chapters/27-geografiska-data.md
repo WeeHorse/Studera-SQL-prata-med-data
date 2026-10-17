@@ -32,7 +32,7 @@ En geografisk position kan anges med två koordinater:
 - **Latitud** – läget norr eller söder om ekvatorn.
 - **Longitud** – läget öster eller väster om en referensmeridian.
 
-Malmö ligger ungefär vid latitud `55.605` och longitud `13.003`.
+Centrala Malmö ligger ungefär vid latitud `55.605` och longitud `13.003`. Koordinaterna beskriver en ungefärlig position, inte någon av de fiktiva adresserna i bokhandelns databas.
 
 Vi skulle kunna lägga till två numeriska kolumner:
 
