@@ -1,0 +1,8 @@
+erDiagram
+ direction LR
+ CUSTOMER ||--o{ ADDRESS : has
+ CUSTOMER ||--o{ ORDER : places
+ ORDER ||--|{ ORDER_ITEM : contains
+ PRODUCT ||--o{ ORDER_ITEM : appears_in
+ PRODUCT_TYPE o|--o{ PRODUCT : classifies
+ PRODUCT }o--o{ AUTHOR : written_by

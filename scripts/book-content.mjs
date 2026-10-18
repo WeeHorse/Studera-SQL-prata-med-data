@@ -25,7 +25,8 @@ export function preparePrint() {
     '<ol>',
     ...items.map(item => '<li><a href="#kapitel-' + item.id + '">' + item.title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a></li>'),
     '<li><a href="#bok-forfattare">Om författaren</a></li>',
-    '<li><a href="#bok-bilaga">Bilaga – exempeldatabasen</a></li>',
+    '<li><a href="#bok-bilaga-a">Bilaga A – Att planera och modellera en databas</a></li>',
+    '<li><a href="#bok-bilaga">Bilaga B – Exempeldatabasen</a></li>',
     '</ol>',
     '</section>'
   ].join('\n');
@@ -35,6 +36,9 @@ export function preparePrint() {
       toc,
       '<section class="book-print-author"><span id="bok-forfattare"></span><div class="author-card">' + readFileSync('publishing/print/author.md','utf8').split('<div class="author-card">')[1].trim() + '</section>',
       ...items.map(item => item.source.trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="kapitel-' + item.id + '">' + title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</h1>')),
+      readFileSync('content/sv/bilaga-a-databasmodellering.md', 'utf8').trim()
+        .replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga-a">' + title.replace(/&/g, '&amp;') + '</h1>')
+        .replace(/!\[([^\]]*)\]\(\/images\/([^)]+)\)/g, '![$1](../../content/public/images/$2)'),
       readFileSync('publishing/print/appendix-database.md', 'utf8').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga">' + title.replace(/&/g, '&amp;') + '</h1>')
     ].join('\n\n') + '\n');
   return items;

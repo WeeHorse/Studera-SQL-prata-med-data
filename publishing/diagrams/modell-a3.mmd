@@ -1,0 +1,38 @@
+erDiagram
+ direction TB
+ CUSTOMERS ||--o{ ADDRESSES : has
+ CUSTOMERS ||--o{ ORDERS : places
+ ORDERS ||--o{ ORDER_ITEMS : contains
+ PRODUCTS ||--o{ ORDER_ITEMS : ordered_as
+ PRODUCT_TYPES o|--o{ PRODUCTS : classifies
+ PRODUCTS ||--o{ PRODUCT_AUTHORS : has
+ AUTHORS ||--o{ PRODUCT_AUTHORS : contributes
+ CUSTOMERS { int id PK
+ string name
+ string email
+ date birthday }
+ ADDRESSES { int id PK
+ int customer_id FK
+ string street
+ string postal_code
+ string city }
+ ORDERS { int id PK
+ int customer_id FK
+ datetime ordered_at }
+ ORDER_ITEMS { int id PK
+ int order_id FK
+ int product_id FK
+ int quantity
+ decimal unit_price }
+ PRODUCTS { int id PK
+ string title
+ decimal price
+ int stock
+ int product_type_id FK }
+ PRODUCT_TYPES { int id PK
+ string name }
+ AUTHORS { int id PK
+ string name
+ string email }
+ PRODUCT_AUTHORS { int product_id PK,FK
+ int author_id PK,FK }

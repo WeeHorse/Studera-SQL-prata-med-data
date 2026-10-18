@@ -2,7 +2,7 @@
 import { withBase } from 'vitepress'
 </script>
 
-# Bilaga – exempeldatabasen
+# Bilaga B – Exempeldatabasen
 
 Bokens återkommande exempel utgår från en fiktiv bokhandel. Här kan du ladda ner ett SQL-skript som skapar tabellerna och fyller dem med samma grunddata som används i många av kapitlens exempel.
 
