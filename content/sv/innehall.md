@@ -5,6 +5,8 @@ sidebar: false
 
 # Innehåll
 
+<div class="book-toc-marker"></div>
+
 - [1. Vad är en databas?](/sv/chapters/01-vad-ar-en-databas.html)
 - [2. Att förstå relationella data](/sv/chapters/02-att-forsta-relationella-data.html)
 - [3. Att komma igång med SQL](/sv/chapters/03-att-komma-igang-med-sql.html)
