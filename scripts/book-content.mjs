@@ -32,8 +32,8 @@ export function preparePrint() {
     [
       readFileSync('publishing/print/author.md', 'utf8').trim(),
       toc,
-      ...items.map(item => '<span id="kapitel-' + item.id + '"></span>\n\n' + item.source.trim()),
-      '<span id="bok-bilaga"></span>\n\n' + readFileSync('publishing/print/appendix-database.md', 'utf8').trim()
+      ...items.map(item => item.source.trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="kapitel-' + item.id + '">' + title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</h1>')),
+      readFileSync('publishing/print/appendix-database.md', 'utf8').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga">' + title.replace(/&/g, '&amp;') + '</h1>')
     ].join('\n\n') + '\n');
   return items;
 }
