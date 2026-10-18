@@ -106,3 +106,15 @@
 @media(max-width:500px){.book-author-box{grid-template-columns:76px 1fr;gap:.75rem}.book-author-box img{width:76px;height:102px}}
 /* Innehållsförteckningen använder samma begränsade läsbredd. */
 .VPDoc .content:has(.book-toc-marker) {max-width:800px;}
+
+/* Författarboxen får något större skala men behåller sin bottenförankring. */
+.book-author-box { grid-template-columns: 132px minmax(0,1fr); gap: 1.25rem; padding: 1.25rem 0; }
+.book-author-box img { width: 132px; height: 176px; }
+.book-author-box h1 { font-size: 1.25rem; }
+.book-author-box p { font-size: .98rem; line-height: 1.55; }
+@media(max-width:500px) {
+  .book-author-box { grid-template-columns: 96px minmax(0,1fr); gap: .85rem; }
+  .book-author-box img { width:96px; height:128px; }
+  .book-author-box h1 { font-size:1.12rem; }
+  .book-author-box p { font-size:.9rem; }
+}
