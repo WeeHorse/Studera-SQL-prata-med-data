@@ -1,4 +1,4 @@
-# Bilaga – exempeldatabasen
+# Bilaga B – Exempeldatabasen
 
 Till boken hör en nedladdningsbar exempeldatabas med bokhandelns tabeller och grunddata. Skriptet innehåller bland annat kunder, adresser, produkter, produkttyper, författare och beställningar.
 
