@@ -138,3 +138,9 @@ tr, figure { break-inside: avoid; }
 .book-print-author .author-card img {width:26mm;height:35mm;}
 .book-print-author .author-card h2 {font-size:10pt;}
 .book-print-author .author-card p {font-size:7.5pt;}
+
+/* Något större författarbox, fortsatt i sidfoten efter innehållsförteckningen. */
+.book-print-author .author-card { grid-template-columns: 34mm 1fr; gap: 5mm; }
+.book-print-author .author-card img { width:34mm; height:46mm; }
+.book-print-author .author-card h2 { font-size: 12pt; }
+.book-print-author .author-card p { font-size: 8.5pt; line-height: 1.4; }

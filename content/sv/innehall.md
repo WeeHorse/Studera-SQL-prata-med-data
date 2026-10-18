@@ -40,3 +40,6 @@ sidebar: false
 - [Bilaga – exempeldatabasen](/sv/bilaga-exempeldatabas.html)
 
 [Ladda ner A5-PDF](/downloads/studera-sql-sv-a5.pdf)
+
+
+[Fortsätt till författarsidan →](/sv/forfattare.html)
