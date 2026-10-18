@@ -47,48 +47,35 @@ tr, figure { break-inside: avoid; }
 .book-frontmatter__eyebrow { display: none; }
 
 
-/* Ursprunglig forskningsrapport som formspråklig inspiration;
-   all text sätts i HTML och är därför sökbar och tryckskarp. */
+/* Rapportomslag: sidfoten sitter vid nedre kanten i tryckytan.
+   HTML-text och ASCII-ram ger sökbar, tryckskarp typografi. */
 .sql-cover {
   box-sizing: border-box;
-  width: 100%;
-  height: 173mm;
-  padding: 8mm 7mm 11mm;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  color: #151515;
-  background: #f4f0e4;
-  font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  break-after: page;
-  break-inside: avoid;
+  width: 100%; height: 173mm;
+  padding: 8mm 5mm 4mm;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; overflow: hidden;
+  color: #1e1e1c; background: #f0ebdd;
+  break-after: page; break-inside: avoid;
 }
 .sql-cover p { margin: 0; }
-.sql-cover__eyebrow, .sql-cover__author, .sql-cover__footer,
-.sql-cover__example { font-family: "Courier New", Courier, monospace; }
-.sql-cover__eyebrow { font-size: 9pt; letter-spacing: .09em; }
-.sql-cover__heading { margin-top: 8mm; }
+.sql-cover__eyebrow { font: 7.5pt/1.25 "Courier New", Courier, monospace; letter-spacing: -.04em; }
+.sql-cover__heading { width: 100%; margin-top: 18mm; }
 .sql-cover h1 {
-  font: 800 29pt/1.03 "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  white-space: nowrap;
-  letter-spacing: -.045em;
-  margin: 0 0 3mm;
-  break-before: auto;
-  break-after: auto;
+  font: 900 15pt/1.12 Arial, Helvetica, sans-serif;
+  letter-spacing: -.04em; white-space: nowrap;
+  margin: 0; break-before: auto; break-after: auto;
 }
-.sql-cover__subtitle { font-size: 16pt; font-weight: 700; }
-.sql-cover__author { font-size: 11pt; }
-.sql-cover__example { width: max-content; max-width: 100%; text-align: left; }
-.sql-cover__example-label { text-align: center; font-size: 7pt; margin-bottom: 2mm !important; }
+.sql-cover__subtitle { font: 700 10pt/1.2 Arial, Helvetica, sans-serif; margin-top: 3mm !important; }
+.sql-cover__author { font: 7.5pt/1.35 "Courier New", Courier, monospace; margin-top: 13mm; }
+.sql-cover__example { width: 100%; margin-top: 18mm; }
+.sql-cover__example-label { font: 8pt/1.2 "Courier New", Courier, monospace; margin-bottom: 4mm !important; }
 .sql-cover__example pre {
-  font: 9pt/1.55 "Courier New", Courier, monospace;
-  white-space: pre;
-  overflow-wrap: normal;
-  padding: 3.5mm 5mm;
-  margin: 0;
-  border: .4pt dashed #151515;
-  background: transparent;
+  display: table; font: 6.6pt/1.3 "Courier New", Courier, monospace;
+  letter-spacing: -.02em; white-space: pre; overflow-wrap: normal;
+  text-align: left; margin: 0 auto; padding: 0; border: 0; background: transparent;
 }
-.sql-cover__footer { font-size: 8pt; line-height: 1.8; }
+.sql-cover__footer { width: 100%; margin-top: auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.sql-cover__brand { font: 900 10pt/1 Arial, Helvetica, sans-serif; letter-spacing: -.04em; }
+.sql-cover__brand-sub { font: 9.5pt/1 "Courier New", Courier, monospace; }
+.sql-cover__edition { font: 7.5pt/1.3 "Courier New", Courier, monospace; margin-top: 4mm; }

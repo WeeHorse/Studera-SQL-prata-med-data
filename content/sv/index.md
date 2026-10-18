@@ -3,23 +3,33 @@ import { withBase } from 'vitepress'
 </script>
 
 <section class="sql-cover" aria-label="Omslag: Studera SQL – Prata med data">
-  <p class="sql-cover__eyebrow">STUDERA SQL · 2026</p>
+  <p class="sql-cover__eyebrow">RESEARCH REPORT NH2026-3</p>
   <div class="sql-cover__heading">
-    <h1>STUDERA SQL</h1>
-    <p class="sql-cover__subtitle">Prata med data</p>
+    <h1>STUDERA SQL: PRATA MED DATA</h1>
+    <p class="sql-cover__subtitle">Datafilosofi och praktisk implementation</p>
   </div>
-  <p class="sql-cover__author">Benjamin Berglund</p>
+  <div class="sql-cover__author">
+    <p>av Benjamin Berglund</p>
+    <p>Node Hill Research Laboratory</p>
+    <p>Lund, Sweden</p>
+  </div>
   <div class="sql-cover__example">
-    <p class="sql-cover__example-label">EXEMPEL 01: EN QUERY</p>
-    <pre>SELECT title, price
-FROM products
-WHERE stock &gt; 0
-ORDER BY title;</pre>
+    <p class="sql-cover__example-label">Example 1: Complex Query</p>
+    <pre>+----------------------------------+
+| SELECT NAME, SALARY              |
+| FROM EMPLOYEES                   |
+| WHERE                            |
+| DEPARTMENT_NO = 'D01'            |
+| AND                              |
+| SALARY &gt; (SELECT AVG(SALARY)     |
+|           FROM EMPLOYEES)        |
++----------------------------------+</pre>
   </div>
-  <div class="sql-cover__footer">
-    <p>En introduktion till databaser och SQL</p>
-    <p>2026 års utgåva</p>
-  </div>
+  <footer class="sql-cover__footer">
+    <div class="sql-cover__brand">NODEHILL</div>
+    <div class="sql-cover__brand-sub">Research</div>
+    <div class="sql-cover__edition">OCT 2026 (Current Edition)</div>
+  </footer>
 </section>
 
 <div class="author-card">
