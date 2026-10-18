@@ -7,7 +7,7 @@ import { withBase } from 'vitepress'
 import './index-cover.css'
 </script>
 
-<a class="book-cover-entry" :href="withBase('/sv/forfattare.html')" aria-label="Öppna boken – gå till författarsidan">
+<a class="book-cover-entry" :href="withBase('/sv/innehall.html')" aria-label="Öppna boken – gå till innehållsförteckningen">
 <section class="sql-cover" aria-label="Omslag: Studera SQL – Prata med data">
   <p class="sql-cover__eyebrow">RESEARCH REPORT NH2026-3</p>
   <div class="sql-cover__heading">

@@ -115,3 +115,26 @@ tr, figure { break-inside: avoid; }
 .book-print-toc ol { padding-left: 7mm; margin: 0; }
 .book-print-toc li { font-size: 8.5pt; line-height: 1.2; margin: 0 0 2mm; }
 .book-print-toc a { color: inherit; text-decoration: none; }
+
+/* Författarporträtt efter innehållet, längst ned på en egen A5-sida. */
+.book-print-author {
+  break-before: page;
+  break-after: page;
+  height: 173mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.book-print-author .author-card {
+  break-before: auto;
+  break-after: auto;
+  margin: 0;
+  padding: 3mm 0;
+  grid-template-columns: 26mm 1fr;
+  gap: 4mm;
+  border-top: .3pt solid #aaa;
+  border-bottom: .3pt solid #aaa;
+}
+.book-print-author .author-card img {width:26mm;height:35mm;}
+.book-print-author .author-card h2 {font-size:10pt;}
+.book-print-author .author-card p {font-size:7.5pt;}

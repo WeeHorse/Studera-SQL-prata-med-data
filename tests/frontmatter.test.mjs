@@ -3,20 +3,21 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { preparePrint } from '../scripts/book-content.mjs';
 
-test('webbomslagen leder till författarsidan och sedan innehåll', () => {
+test('webbomslagen leder till innehållet och författarsidan ligger efter innehåll', () => {
   for (const file of ['content/index.md', 'content/sv/index.md']) {
     const source = readFileSync(file, 'utf8');
     assert.match(source, /layout: false/);
     assert.match(source, /book-cover-entry/);
-    assert.match(source, /forfattare\.html/);
+    assert.match(source, /innehall\.html/);
   }
-  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /innehall\.html/);
+  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /01-vad-ar-en-databas\.html/);
 });
 test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   const toc = readFileSync('content/sv/innehall.md','utf8');
   const chapters = readdirSync('content/sv/chapters').filter(x => /^\d{2}-.*\.md$/.test(x));
   for (const file of chapters) assert.ok(toc.includes(file.replace(/\.md$/, '.html')), file);
   assert.match(toc, /bilaga-exempeldatabas\.html/);
+  assert.ok(toc.indexOf('/sv/forfattare.html') < toc.indexOf('/sv/bilaga-exempeldatabas.html'));
 });
 test('PDF har innehållsförteckning och stabila ankare', () => {
   preparePrint();
@@ -25,11 +26,12 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   const author = book.indexOf('class="author-card"');
   const toc = book.indexOf('class="book-print-toc"');
   const first = book.indexOf('id="kapitel-01"');
-  assert.ok(covers >= 0 && covers < author && author < toc && toc < first);
+  assert.ok(covers >= 0 && covers < toc && toc < author && author < first);
   for (let i = 1; i <= 29; i++) {
     const id = 'kapitel-' + String(i).padStart(2, '0');
     assert.ok(book.includes('href="#'+id+'"'),id+' link');
     assert.ok(book.includes('id="'+id+'"'),id+' target');
   }
+  assert.ok(book.includes('href="#bok-forfattare"') && book.includes('id="bok-forfattare"'));
   assert.ok(book.includes('href="#bok-bilaga"') && book.includes('id="bok-bilaga"'));
 });
