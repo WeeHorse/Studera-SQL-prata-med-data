@@ -51,7 +51,7 @@ Vi behöver dessutom identiteter som inte är beroende av namn och titlar. Två 
 
 ### Vår första ER-modell
 
-![Figur A.1: Första, förenklade ER-modellen med kund, beställning, produkt och författare.](./images/modell-a1.svg)
+![Figur A.1: Första, förenklade ER-modellen med kund, beställning, produkt och författare.](/images/modell-a1.svg)
 
 *Figur A.1 – Vårt första försök. Vi har ännu inte prövat antagandena om antal produkter och författare.*
 
@@ -150,7 +150,7 @@ Två kunder kan bo på samma fysiska adress. Måste de då dela samma adresspost
 
 Nu kan vi rita en modell som faktiskt följer våra beslut.
 
-![Figur A.2: Reviderad konceptuell ER-modell med adress, orderrad, produkttyp och många-till-många-samband till författare.](./images/modell-a2.svg)
+![Figur A.2: Reviderad konceptuell ER-modell med adress, orderrad, produkttyp och många-till-många-samband till författare.](/images/modell-a2.svg)
 
 *Figur A.2 – Den konceptuella modellen efter våra diskussioner.*
 
@@ -170,7 +170,7 @@ När en relation är M:N behöver vi i den relationella modellen en särskild ko
 
 Den sammanlagda modellen får åtta tabeller, precis som i bokens gemensamma exempeldatabas.
 
-![Figur A.3: Logisk ER-modell med bokhandelns åtta tabeller samt primärnycklar och främmande nycklar.](./images/modell-a3.svg)
+![Figur A.3: Logisk ER-modell med bokhandelns åtta tabeller samt primärnycklar och främmande nycklar.](/images/modell-a3.svg)
 
 *Figur A.3 – Den logiska modellen, med nycklar och referenser.*
 
