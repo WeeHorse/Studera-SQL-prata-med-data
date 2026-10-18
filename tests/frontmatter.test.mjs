@@ -17,6 +17,9 @@ test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   const chapters = readdirSync('content/sv/chapters').filter(x => /^\d{2}-.*\.md$/.test(x));
   for (const file of chapters) assert.ok(toc.includes(file.replace(/\.md$/, '.html')), file);
   assert.match(toc, /bilaga-exempeldatabas\.html/);
+  assert.match(toc, /bilaga-a-databasmodellering\.html/);
+  assert.ok(toc.indexOf('bilaga-a-databasmodellering.html') < toc.indexOf('bilaga-exempeldatabas.html'));
+  for (const n of [1,2,3]) assert.match(readFileSync('content/sv/bilaga-a-databasmodellering.md','utf8'), new RegExp('modell-a'+n+'\\.svg'));
   assert.ok(toc.indexOf('/sv/forfattare.html') < toc.indexOf('/sv/bilaga-exempeldatabas.html'));
 });
 test('PDF har innehållsförteckning och stabila ankare', () => {
@@ -34,4 +37,6 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   }
   assert.ok(book.includes('href="#bok-forfattare"') && book.includes('id="bok-forfattare"'));
   assert.ok(book.includes('href="#bok-bilaga"') && book.includes('id="bok-bilaga"'));
+  assert.ok(book.includes('href="#bok-bilaga-a"') && book.includes('id="bok-bilaga-a"'));
+  assert.ok(book.indexOf('id="bok-bilaga-a"') < book.indexOf('id="bok-bilaga"'));
 });
