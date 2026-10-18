@@ -23,7 +23,7 @@ Om hundra kunder använder bokhandelns webbplats behöver det inte innebära hun
 
 ### Användare och rättigheter
 
-I MySQL kan vi skapa ett konto för bokhandelns applikation:
+I MySQL kan vi skapa ett konto för bokhandelns applikation. Behörighetsexemplen i detta kapitel använder det illustrativa schemanamnet `bookstore`; den nedladdningsbara övningsdatabasen heter `studera_sql_bokhandel`. Exemplen kräver dessutom administratörsbehörighet och särskilda testkonton, och ska därför inte köras direkt i en delad eller produktionssatt databasmiljö:
 
 ```sql
 CREATE USER 'bookstore_app'@'localhost'
