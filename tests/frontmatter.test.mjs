@@ -10,7 +10,7 @@ test('webbomslagen leder till innehållet och författarsidan ligger efter inneh
     assert.match(source, /book-cover-entry/);
     assert.match(source, /innehall\.html/);
   }
-  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /forord\.html/);
+  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /innehall\.html/);
 });
 test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   const toc = readFileSync('content/sv/innehall.md','utf8');
@@ -31,7 +31,7 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   const toc = book.indexOf('class="book-print-toc"');
   const first = book.indexOf('id="kapitel-01"');
   const foreword = book.indexOf('id="bok-forord"');
-  assert.ok(covers >= 0 && covers < toc && toc < author && author < foreword && foreword < first);
+  assert.ok(covers >= 0 && covers < toc && toc < foreword && foreword < first && first < author);
   assert.ok(book.includes('href="#bok-forord"'));
   assert.ok(book.includes('Malmö, oktober 2026'));
   assert.ok(book.includes('research.ibm.com/publications/sequel-a-struciured-english-query-language'));
