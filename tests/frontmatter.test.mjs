@@ -10,13 +10,14 @@ test('webbomslagen leder till innehållet och författarsidan ligger efter inneh
     assert.match(source, /book-cover-entry/);
     assert.match(source, /innehall\.html/);
   }
-  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /01-vad-ar-en-databas\.html/);
+  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /forord\.html/);
 });
 test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   const toc = readFileSync('content/sv/innehall.md','utf8');
   const chapters = readdirSync('content/sv/chapters').filter(x => /^\d{2}-.*\.md$/.test(x));
   for (const file of chapters) assert.ok(toc.includes(file.replace(/\.md$/, '.html')), file);
   assert.match(toc, /bilaga-exempeldatabas\.html/);
+  assert.match(toc, /forord\.html/);
   assert.match(toc, /bilaga-a-databasmodellering\.html/);
   assert.ok(toc.indexOf('bilaga-a-databasmodellering.html') < toc.indexOf('bilaga-exempeldatabas.html'));
   for (const n of [1,2,3]) assert.match(readFileSync('content/sv/bilaga-a-databasmodellering.md','utf8'), new RegExp('modell-a'+n+'\\.svg'));
@@ -29,7 +30,11 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   const author = book.indexOf('class="author-card"');
   const toc = book.indexOf('class="book-print-toc"');
   const first = book.indexOf('id="kapitel-01"');
-  assert.ok(covers >= 0 && covers < toc && toc < author && author < first);
+  const foreword = book.indexOf('id="bok-forord"');
+  assert.ok(covers >= 0 && covers < toc && toc < author && author < foreword && foreword < first);
+  assert.ok(book.includes('href="#bok-forord"'));
+  assert.ok(book.includes('Malmö, oktober 2026'));
+  assert.ok(book.includes('research.ibm.com/publications/sequel-a-struciured-english-query-language'));
   for (let i = 1; i <= 29; i++) {
     const id = 'kapitel-' + String(i).padStart(2, '0');
     assert.ok(book.includes('href="#'+id+'"'),id+' link');
