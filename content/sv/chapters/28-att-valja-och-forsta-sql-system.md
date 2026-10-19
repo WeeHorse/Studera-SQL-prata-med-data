@@ -33,7 +33,7 @@ Men all SQL är inte lika portabel. Vi har redan mött exempel på skillnader i 
 
 ### SQL-standarden och dialekter
 
-SQL har en internationell standard, som utvecklas över tid.
+SQL har en internationell standard, ISO/IEC 9075, som utvecklas över tid (se [Referenser och vidare läsning](/sv/referenser.html)).
 
 Standarden beskriver bland annat språkets grundläggande konstruktioner. Men den betyder inte att alla databassystem erbjuder exakt samma funktioner eller tolkar alla situationer på samma sätt.
 

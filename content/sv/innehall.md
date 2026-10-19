@@ -40,6 +40,7 @@ sidebar: false
 - [29. Vad är en databas inte?](/sv/chapters/29-vad-ar-en-databas-inte.html)
 - [Bilaga A – Att planera och modellera en databas](/sv/bilaga-a-databasmodellering.html)
 - [Bilaga B – Exempeldatabasen](/sv/bilaga-exempeldatabas.html)
+- [Referenser och vidare läsning](/sv/referenser.html)
 
 [Ladda ner A5-PDF](/downloads/studera-sql-sv-a5.pdf)
 

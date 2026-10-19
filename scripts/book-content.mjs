@@ -28,6 +28,7 @@ export function preparePrint() {
     ...items.map(item => '<li><a href="#kapitel-' + item.id + '">' + item.title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a></li>'),
     '<li><a href="#bok-bilaga-a">Bilaga A – Att planera och modellera en databas</a></li>',
     '<li><a href="#bok-bilaga">Bilaga B – Exempeldatabasen</a></li>',
+    '<li><a href="#bok-referenser">Referenser och vidare läsning</a></li>',
     '</ol>',
     '</section>'
   ].join('\n');
@@ -41,7 +42,8 @@ export function preparePrint() {
       readFileSync('content/sv/bilaga-a-databasmodellering.md', 'utf8').trim()
         .replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga-a">' + title.replace(/&/g, '&amp;') + '</h1>')
         .replace(/!\[([^\]]*)\]\(\/images\/([^)]+)\)/g, '![$1](../../content/public/images/$2)'),
-      readFileSync('publishing/print/appendix-database.md', 'utf8').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga">' + title.replace(/&/g, '&amp;') + '</h1>')
+      readFileSync('publishing/print/appendix-database.md', 'utf8').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga">' + title.replace(/&/g, '&amp;') + '</h1>'),
+      readFileSync('content/sv/referenser.md', 'utf8').replace(/^---\n[\s\S]*?\n---\n/, '').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-referenser">' + title.replace(/&/g, '&amp;') + '</h1>')
     ].join('\n\n') + '\n');
   return items;
 }

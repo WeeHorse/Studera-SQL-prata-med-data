@@ -1,5 +1,7 @@
 # 2. Att förstå relationella data
 
+Den relationella modellen formulerades av E. F. Codd 1970. För modellering av entiteter och samband blev Peter Chens ER-modell från 1976 ett betydelsefullt steg (se [Referenser och vidare läsning](/sv/referenser.html)).
+
 En bokhandel behöver veta vilka kunder den har, var de bor och vart deras beställningar ska levereras. Informationen beskriver olika saker, men sakerna hör ihop.
 
 När vi organiserar data behöver vi därför bestämma vad som är en självständig företeelse, vad som är en egenskap och vad som är ett samband. Valen påverkar vilka frågor vi kan besvara och hur lätt informationen går att förändra.
