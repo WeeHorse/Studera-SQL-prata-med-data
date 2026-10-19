@@ -118,3 +118,6 @@
   .book-author-box h1 { font-size:1.12rem; }
   .book-author-box p { font-size:.9rem; }
 }
+
+/* Samma begränsade satsbredd som innehålls- och författarsidorna. */
+.VPDoc .content:has(.book-foreword-marker) { max-width: 760px; margin-inline: auto; }

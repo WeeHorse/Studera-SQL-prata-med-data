@@ -156,3 +156,6 @@ img[src*="modell-a"] {
   object-fit: contain;
   break-inside: avoid;
 }
+
+/* Förord på egen A5-sida mellan författarpresentation och första kapitlet. */
+.book-print-foreword { break-before: page; margin: 0 0 8mm; font-size: 19pt; }

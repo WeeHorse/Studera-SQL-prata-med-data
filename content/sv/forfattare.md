@@ -14,7 +14,7 @@ import { withBase } from 'vitepress'
   <div>
     <h1>Om författaren</h1>
     <p><strong>Benjamin Berglund</strong>, systemutvecklare, utbildare och utbildningsutvecklare med lång erfarenhet av att konstruera digitala system, leda utvecklingsarbete och att undervisa inom utveckling, data och samarbete. Med ett särskilt intresse för sambanden mellan information, teknik, människor och verksamheter.</p>
-    <p><a :href="withBase('/sv/chapters/01-vad-ar-en-databas.html')">Börja läsa – kapitel 1 →</a></p>
+    <p><a :href="withBase('/sv/forord.html')">Läs förordet →</a></p>
   </div>
   </div>
 </div>
