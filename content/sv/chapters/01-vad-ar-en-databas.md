@@ -78,6 +78,8 @@ En tabell i ett dokument eller kalkylblad är inte automatiskt en databas.
 
 En **databas** är en organiserad samling data som kan lagras, hanteras och användas. För att arbeta med den använder vi vanligtvis ett **databashanteringssystem** (DBMS, Database Management System).
 
+Språket har en historia som sträcker sig tillbaka till bland annat Chamberlin och Boyces arbete med SEQUEL 1974 (se [Referenser och vidare läsning](/sv/referenser.html)).
+
 I relationella databaser använder vi frågespråket **SQL (Structured Query Language)** för att läsa, lägga till, förändra och ta bort information. SQL är utformat för att likna vanlig engelska, samtidigt som språket har en tydlig struktur som datorer kan tolka.
 
 Exempel på databashanteringssystem som använder SQL är MySQL, PostgreSQL, SQLite och Microsoft SQL Server.
