@@ -31,7 +31,7 @@ export function chapterEndnotes(source, chapterId) {
   const notes = [...numbering].map(([id, n]) => {
     const root = 'kapitel-' + chapterId + '-not-' + n;
     const back = '<a href="#' + root + '-ref-1" aria-label="Tillbaka till nothänvisningen">↩</a>';
-    return '<li id="' + root + '">' + definitions.get(id) + ' ' + back + '</li>';
+    return n + '. <span id="' + root + '"></span>' + definitions.get(id) + ' ' + back;
   });
   return body + '\n\n<section class="book-chapter-endnotes">\n\n#### Noter\n\n<ol>\n' + notes.join('\n') + '\n</ol>\n\n</section>';
 }
