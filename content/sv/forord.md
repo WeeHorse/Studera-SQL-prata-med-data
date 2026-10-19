@@ -3,7 +3,7 @@ title: Förord
 sidebar: false
 ---
 
-<div class="book-foreword">
+<div class="book-foreword-marker"></div>
 
 # Förord
 
@@ -25,7 +25,5 @@ Jag hoppas att den här boken inte bara hjälper dig att skriva SQL, utan också
 
 *Benjamin Berglund*  
 *Malmö, oktober 2026*
-
-</div>
 
 [Börja läsa – Kapitel 1](/sv/chapters/01-vad-ar-en-databas.html)
