@@ -33,5 +33,5 @@ export function chapterEndnotes(source, chapterId) {
     const back = '<a href="#' + root + '-ref-1" aria-label="Tillbaka till nothänvisningen">↩</a>';
     return n + '. <span id="' + root + '"></span>' + definitions.get(id) + ' ' + back;
   });
-  return body + '\n\n<section class="book-chapter-endnotes">\n\n#### Noter\n\n<ol>\n' + notes.join('\n') + '\n</ol>\n\n</section>';
+  return body + '\n\n<h4 class="book-chapter-endnotes">Noter</h4>\n\n' + notes.join('\n') + '\n';
 }
