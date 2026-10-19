@@ -36,12 +36,12 @@ sidebar: false
 - [27. Geografiska data](/sv/chapters/27-geografiska-data.html)
 - [28. Att välja och förstå SQL-system](/sv/chapters/28-att-valja-och-forsta-sql-system.html)
 - [29. Vad är en databas inte?](/sv/chapters/29-vad-ar-en-databas-inte.html)
-- [Om författaren](/sv/forfattare.html)
 - [Förord](/sv/forord.html)
+- [Om författaren](/sv/forfattare.html)
 - [Bilaga A – Att planera och modellera en databas](/sv/bilaga-a-databasmodellering.html)
 - [Bilaga B – Exempeldatabasen](/sv/bilaga-exempeldatabas.html)
 
 [Ladda ner A5-PDF](/downloads/studera-sql-sv-a5.pdf)
 
 
-[Fortsätt till författarsidan →](/sv/forfattare.html)
+[Fortsätt till förordet →](/sv/forord.html)
