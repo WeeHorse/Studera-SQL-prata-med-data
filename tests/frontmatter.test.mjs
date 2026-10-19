@@ -8,6 +8,9 @@ test('webbomslagen leder till innehållet och författarsidan ligger efter inneh
     const source = readFileSync(file, 'utf8');
     assert.match(source, /layout: false/);
     assert.match(source, /book-cover-entry/);
+    assert.match(source, /onWheel/);
+    assert.match(source, /onTouchEnd/);
+    assert.match(source, /onUnmounted/);
     assert.match(source, /innehall\.html/);
   }
   assert.match(readFileSync('content/sv/forfattare.md','utf8'), /forord\.html/);
