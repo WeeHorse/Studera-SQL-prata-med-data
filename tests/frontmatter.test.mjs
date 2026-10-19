@@ -10,7 +10,7 @@ test('webbomslagen leder till innehållet och författarsidan ligger efter inneh
     assert.match(source, /book-cover-entry/);
     assert.match(source, /innehall\.html/);
   }
-  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /innehall\.html/);
+  assert.match(readFileSync('content/sv/forfattare.md','utf8'), /forord\.html/);
 });
 test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   const toc = readFileSync('content/sv/innehall.md','utf8');
@@ -18,8 +18,8 @@ test('webbinnehåll länkar till alla kapitel och bilagan', () => {
   for (const file of chapters) assert.ok(toc.includes(file.replace(/\.md$/, '.html')), file);
   assert.match(toc, /bilaga-exempeldatabas\.html/);
   assert.match(toc, /forord\.html/);
+  assert.ok(toc.indexOf('/sv/forfattare.html') < toc.indexOf('/sv/forord.html'));
   assert.ok(toc.indexOf('/sv/forord.html') < toc.indexOf('/sv/chapters/01-vad-ar-en-databas.html'));
-  assert.ok(toc.indexOf('/sv/chapters/29-vad-ar-en-databas-inte.html') < toc.indexOf('/sv/forfattare.html'));
   assert.ok(toc.indexOf('/sv/forfattare.html') < toc.indexOf('/sv/bilaga-a-databasmodellering.html'));
   assert.match(toc, /bilaga-a-databasmodellering\.html/);
   assert.ok(toc.indexOf('bilaga-a-databasmodellering.html') < toc.indexOf('bilaga-exempeldatabas.html'));
@@ -34,11 +34,11 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   const toc = book.indexOf('class="book-print-toc"');
   const first = book.indexOf('id="kapitel-01"');
   const foreword = book.indexOf('id="bok-forord"');
-  assert.ok(covers >= 0 && covers < toc && toc < foreword && foreword < first && first < author);
+  assert.ok(covers >= 0 && covers < toc && toc < author && author < foreword && foreword < first);
   assert.ok(book.includes('href="#bok-forord"'));
   const tocHtml = book.slice(book.indexOf('class="book-print-toc"'),book.indexOf('</section>',book.indexOf('class="book-print-toc"')));
+  assert.ok(tocHtml.indexOf('href="#bok-forfattare"') < tocHtml.indexOf('href="#bok-forord"'));
   assert.ok(tocHtml.indexOf('href="#bok-forord"') < tocHtml.indexOf('href="#kapitel-01"'));
-  assert.ok(tocHtml.indexOf('href="#kapitel-29"') < tocHtml.indexOf('href="#bok-forfattare"'));
   assert.ok(book.includes('Malmö, oktober 2026'));
   assert.ok(book.includes('research.ibm.com/publications/sequel-a-struciured-english-query-language'));
   for (let i = 1; i <= 29; i++) {
