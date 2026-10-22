@@ -35,7 +35,7 @@ test('externa länkar visas som URL bara i Publit-inlagan', () => {
 test('inlagans försidor har rätt ordning och numreringsstilar', () => {
   preparePrint({ interiorOnly: true });
   const book = readFileSync('dist/generated/book-sv-publit.md', 'utf8');
-  const markers = ['book-print-title-leaf', 'book-print-copyright-leaf', 'book-print-toc', 'book-print-author', 'book-print-foreword', 'kapitel-01'];
+  const markers = ['book-print-title-leaf', 'book-print-copyright-leaf', 'book-print-toc', 'book-print-author', 'book-print-foreword-section', 'id="kapitel-01"'];
   const positions = markers.map(marker => book.indexOf(marker));
   assert.ok(positions.every(pos => pos >= 0));
   assert.ok(positions.every((pos, i) => i === 0 || pos > positions[i - 1]));
