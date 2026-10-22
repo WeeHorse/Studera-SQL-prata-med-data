@@ -35,6 +35,8 @@ export function preparePrint({ interiorOnly = false } = {}) {
     '</section>'
   ].join('\n');
   const sections = [
+      '<section class="book-print-title-leaf" aria-label="Försättsblad"></section>',
+      '<section class="book-print-copyright-leaf" aria-label="Upphovsrätt"></section>',
       ...(interiorOnly ? [] : [readFileSync('publishing/print/author.md', 'utf8').split('<div class="author-card">')[0].trim()]),
       toc,
       '<section class="book-print-author"><span id="bok-forfattare"></span><div class="author-card">' + readFileSync('publishing/print/author.md','utf8').split('<div class="author-card">')[1].trim() + '</section>',
