@@ -26,7 +26,24 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - run: sudo apt-get update && sudo apt-get install -y ghostscript poppler-utils qpdf
+      - name: Install only missing PDF tools
+        shell: bash
+        run: |
+          missing=()
+          command -v gs >/dev/null || missing+=(ghostscript)
+          command -v pdfinfo >/dev/null || missing+=(poppler-utils)
+          command -v pdffonts >/dev/null || { [[ " ${missing[*]} " == *" poppler-utils "* ]] || missing+=(poppler-utils); }
+          command -v qpdf >/dev/null || missing+=(qpdf)
+          if (( ${#missing[@]} )); then
+            echo "Installing missing packages: ${missing[*]}"
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${missing[@]}"
+          else
+            echo "All PDF tools are already installed; skipping apt."
+          fi
+          gs --version
+          pdfinfo -v
+          qpdf --version
       - run: npm ci --no-audit --no-fund
       - run: npm test
       - run: npm run build:publit
