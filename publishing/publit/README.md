@@ -48,3 +48,18 @@ pdffonts dist/print/studera-sql-publit-inlaga-a5.pdf
 ## Omslaget
 
 Behåll SEQUEL-inspirerad framsida och skapa baksida/rygg efter Publits mall; avvakta med slutlig layout tills sidantal och materialval är låsta. Även en ny version av inlagan kan ändra ryggbredden.
+
+## Tryckgrenar, preflight och godkännande
+
+Skript och workflow versionshanteras på `main`. Skapa efter merge en gren som `print/upplaga-1` från ett bestämt commit. På `print/**` kör GitHub Actions automatiskt ett särskilt bygge och en **preliminär** preflight (qpdf, Poppler, Ghostscript). Du kan även starta workflow manuellt från en print-gren.
+
+Lokalt (kräver Ghostscript, Poppler och qpdf, på macOS exempelvis via Homebrew):
+
+```sh
+npm run build:publit
+npm run validate:publit
+```
+
+Artefakten innehåller PDF och `publit-preflight.md`. Den automatiska rapporten är **inte PDF/X-4-certifiering**. Efter godkänd preflight inväntar workflow `publit-print-approval`-miljön. För att faktisk mänsklig granskning ska krävas måste en administratör i GitHub gå till **Settings → Environments → publit-print-approval** och lägga till **Required reviewers**. Utan den regeln fortsätter workflow automatiskt; själva godkännandet är då endast en namngiven kontrollpunkt.
+
+Lås den godkända upplagan via commit SHA eller tagg, och beställ provtryck innan uppladdning. Flödet publicerar eller laddar **inte** upp något till Publit.
