@@ -60,6 +60,6 @@ npm run build:publit
 npm run validate:publit
 ```
 
-Artefakten innehåller PDF och `publit-preflight.md`. Den automatiska rapporten är **inte PDF/X-4-certifiering**. Efter godkänd preflight inväntar workflow `publit-print-approval`-miljön. För att faktisk mänsklig granskning ska krävas måste en administratör i GitHub gå till **Settings → Environments → publit-print-approval** och lägga till **Required reviewers**. Utan den regeln fortsätter workflow automatiskt; själva godkännandet är då endast en namngiven kontrollpunkt.
+Preflight körs på pull requests som ändrar bok-, publicerings- eller testfiler samt på `print/**`-grenar. Efter körningen hämtas artefakten `publit-print-review-<commit>` med inlaga och `publit-preflight.md` under **Actions → körningen → Artifacts**, även vid misslyckad kontroll om filerna finns. Rapporten är **inte PDF/X-4-certifiering**. Ingen automatisk godkännandeflagga motsvarar mänsklig granskning: granska PDF och rapport manuellt, godkänn PR och genomför provtryck innan tryckbeställning. Ett skyddat GitHub Environment kan införas separat när det finns en faktisk releaseåtgärd att skydda.
 
 Lås den godkända upplagan via commit SHA eller tagg, och beställ provtryck innan uppladdning. Flödet publicerar eller laddar **inte** upp något till Publit.
