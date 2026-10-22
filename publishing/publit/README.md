@@ -45,7 +45,9 @@ pdffonts dist/print/studera-sql-publit-inlaga-a5.pdf
 
 Öppna även PDF:en visuellt i sidordning. Först efter PDF/X-4-konvertering och validering ska originalet användas som slutlig uppladdningsfil. Spara både källfiler och det validerade originalet för spårbarhet.
 
-## Omslaget
+## Externa länkar i tryck
+
+I Publit-inlagan följs externa Markdown-länkar av sin fullständiga URL inom parentes. Endast tryckinlagan ändras: webb och vanlig läs-PDF behåller länktexterna. Interna ankarlänkar och bildlänkar skrivs inte ut som webbadresser. Långa URL:er får radbrytas och måste kontrolleras visuellt före tryck.\n\n## Omslaget
 
 Behåll SEQUEL-inspirerad framsida och skapa baksida/rygg efter Publits mall; avvakta med slutlig layout tills sidantal och materialval är låsta. Även en ny version av inlagan kan ändra ryggbredden.
 
