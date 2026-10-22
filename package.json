@@ -9,7 +9,8 @@
     "build:pdf": "node scripts/build-print.mjs",
     "build": "npm run build:web && npm run build:pdf",
     "test": "node --test tests/*.test.mjs",
-    "build:publit": "node scripts/build-publit.mjs"
+    "build:publit": "node scripts/build-publit.mjs",
+    "validate:publit": "node scripts/validate-publit.mjs"
   },
   "devDependencies": {
     "vitepress": "1.6.4",
