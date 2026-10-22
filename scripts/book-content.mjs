@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import { chapterEndnotes } from './chapter-endnotes.mjs';
+import { expandPrintUrls } from './print-links.mjs';
 
 export const chaptersDirectory = 'content/sv/chapters';
 export function chapters() {
@@ -33,8 +34,7 @@ export function preparePrint({ interiorOnly = false } = {}) {
     '</ol>',
     '</section>'
   ].join('\n');
-  writeFileSync(interiorOnly ? 'dist/generated/book-sv-publit.md' : 'dist/generated/book-sv.md',
-    [
+  const sections = [
       ...(interiorOnly ? [] : [readFileSync('publishing/print/author.md', 'utf8').split('<div class="author-card">')[0].trim()]),
       toc,
       '<section class="book-print-author"><span id="bok-forfattare"></span><div class="author-card">' + readFileSync('publishing/print/author.md','utf8').split('<div class="author-card">')[1].trim() + '</section>',
@@ -45,6 +45,8 @@ export function preparePrint({ interiorOnly = false } = {}) {
         .replace(/!\[([^\]]*)\]\(\/images\/([^)]+)\)/g, '![$1](../../content/public/images/$2)'),
       readFileSync('publishing/print/appendix-database.md', 'utf8').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga">' + title.replace(/&/g, '&amp;') + '</h1>'),
       readFileSync('content/sv/referenser.md', 'utf8').replace(/^---\n[\s\S]*?\n---\n/, '').trim().replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-referenser">' + title.replace(/&/g, '&amp;') + '</h1>')
-    ].join('\n\n') + '\n');
+    ];
+  writeFileSync(interiorOnly ? 'dist/generated/book-sv-publit.md' : 'dist/generated/book-sv.md',
+    (interiorOnly ? sections.map(expandPrintUrls) : sections).join('\n\n') + '\n');
   return items;
 }
