@@ -180,7 +180,7 @@ img[src*="modell-a"] {
   min-height: 155mm;
 }
 .book-print-toc, .book-print-author { page: preliminary; }
-.book-print-foreword { page: foreword; }
+.book-print-foreword-section { page: foreword; }
 @page preliminary {
   @bottom-left { content: none; }
   @bottom-center { content: none; }
