@@ -1,0 +1,46 @@
+name: Publit print preflight
+
+on:
+  push:
+    branches:
+      - 'print/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    if: startsWith(github.ref, 'refs/heads/print/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: sudo apt-get update && sudo apt-get install -y ghostscript poppler-utils qpdf
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build:publit
+      - name: Preliminary preflight
+        run: npm run validate:publit
+      - name: Upload review bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publit-print-review-${{ github.sha }}
+          path: |
+            dist/print/studera-sql-publit-inlaga-a5.pdf
+            dist/print/publit-preflight.md
+          if-no-files-found: warn
+          retention-days: 30
+
+  approve:
+    needs: preflight
+    runs-on: ubuntu-latest
+    environment:
+      name: publit-print-approval
+    steps:
+      - name: Record release review gate
+        run: echo "Print review environment approved. This does not upload to Publit or certify PDF/X-4."
