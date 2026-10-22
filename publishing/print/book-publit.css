@@ -18,3 +18,10 @@
     color: #444;
   }
 }
+
+/* Tryckupplagan är avsedd för svartvitt/gråskala. Färgkonvertering av
+   inbäddade rasterbilder och tryckprofil verifieras i slutlig preflight. */
+@media print {
+  html { color: #111; background: #fff; }
+  a { color: #111; }
+}
