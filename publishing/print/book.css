@@ -171,3 +171,24 @@ img[src*="modell-a"] {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
+/* Front matter: four unnumbered leaves, then numbered foreword. */
+.book-print-title-leaf, .book-print-copyright-leaf {
+  page: preliminary;
+  break-before: page;
+  break-after: page;
+  min-height: 155mm;
+}
+.book-print-toc, .book-print-author { page: preliminary; }
+.book-print-foreword { page: foreword; }
+@page preliminary {
+  @bottom-left { content: none; }
+  @bottom-center { content: none; }
+  @bottom-right { content: none; }
+}
+/* Vivliostyle increments the page counter as a page begins.
+   A reset to zero makes the first foreword page display 1. */
+@page :nth(1 of foreword) { counter-reset: page 0; }
+/* Keep the contents on one leaf (not a two-page spread). */
+.book-print-toc ol { columns: 2; column-gap: 5mm; padding-left: 5mm; }
+.book-print-toc li { break-inside: avoid; font-size: 7.5pt; line-height: 1.18; margin-bottom: 1.4mm; }
