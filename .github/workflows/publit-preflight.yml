@@ -1,6 +1,14 @@
 name: Publit print preflight
 
 on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'publishing/**'
+      - 'content/**'
+      - 'tests/**'
+      - 'package*.json'
+      - '.github/workflows/publit-preflight.yml'
   push:
     branches:
       - 'print/**'
@@ -11,7 +19,6 @@ permissions:
 
 jobs:
   preflight:
-    if: startsWith(github.ref, 'refs/heads/print/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,12 +42,3 @@ jobs:
             dist/print/publit-preflight.md
           if-no-files-found: warn
           retention-days: 30
-
-  approve:
-    needs: preflight
-    runs-on: ubuntu-latest
-    environment:
-      name: publit-print-approval
-    steps:
-      - name: Record release review gate
-        run: echo "Print review environment approved. This does not upload to Publit or certify PDF/X-4."
