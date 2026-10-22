@@ -1,64 +1,82 @@
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 
 const pdf = resolve(process.argv[2] || 'dist/print/studera-sql-publit-inlaga-a5.pdf');
 const report = resolve(process.argv[3] || 'dist/print/publit-preflight.md');
 const checks = [];
-function cmd(name, args) {
-  try { return execFileSync(name, args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }); }
-  catch (e) { throw new Error(name + ' failed: ' + (e.stderr?.toString() || e.message)); }
-}
-function check(label, ok, detail) {
-  checks.push({ label, ok, detail });
-  console.log((ok ? 'PASS' : 'FAIL') + ' ' + label + (detail ? ': ' + detail : ''));
-}
-if (!existsSync(pdf)) throw new Error('Missing input PDF: ' + pdf);
-let pdfInfo = '', fonts = '', gsInfo = '';
-try {
-  cmd('qpdf', ['--check', pdf]);
-  check('PDF structural integrity (qpdf)', true);
-} catch (e) { check('PDF structural integrity (qpdf)', false, e.message); }
-try {
-  pdfInfo = cmd('pdfinfo', ['-box', pdf]);
-  const count = Number(pdfInfo.match(/^Pages:\s+(\d+)/m)?.[1]);
-  check('Page count', count > 0, String(count || 'missing'));
-  // Validate every page instead of trusting only page 1.
-  if (count > 0) {
-    const all = cmd('pdfinfo', ['-f', '1', '-l', String(count), '-box', pdf]);
-    const media = [...all.matchAll(/Page\s+\d+\s+size:\s+([\d.]+)\s+x\s+([\d.]+)\s+pts/g)];
-    const dimsOk = media.length === count && media.every(m => Math.abs(Number(m[1]) - 419.5276) < 1 && Math.abs(Number(m[2]) - 595.2756) < 1);
-    check('All pages are A5 portrait (148 × 210 mm)', dimsOk, media.length + '/' + count + ' measured');
+const expected = { width: 148 * 72 / 25.4, height: 210 * 72 / 25.4 };
+function command(binary, args) {
+  try {
+    return execFileSync(binary, args, { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+  } catch (error) {
+    throw new Error(`${binary}: ${error.stderr?.toString().trim() || error.message}`);
   }
-} catch (e) { check('PDF page metadata (pdfinfo)', false, e.message); }
-try {
-  fonts = cmd('pdffonts', [pdf]);
-  const lines = fonts.trim().split('\n').slice(2).filter(Boolean);
-  const notEmbedded = lines.filter(line => !/\s+yes\s+(?:yes|no)\s+/i.test(line));
-  check('Fonts embedded', notEmbedded.length === 0, lines.length + ' listed; ' + notEmbedded.length + ' suspicious');
-} catch (e) { check('Font inspection (pdffonts)', false, e.message); }
-try {
-  gsInfo = cmd('gs', ['-q', '-dBATCH', '-dNOPAUSE', '-sDEVICE=nullpage', pdf]);
-  check('Ghostscript raster parse', true);
-} catch (e) { check('Ghostscript raster parse', false, e.message); }
-const mustReview = [
-  'PDF/X-4 compliance and valid output intent (NOT verified by this script)',
-  'Bleed/TrimBox and binding safety margins',
-  'Color/grayscale suitability for chosen Publit product',
-  'Visual review: code, tables, ER diagrams, footnotes and pagination',
-  'Proof copy and final cover using Publit template'
+}
+function check(name, pass, details = '') {
+  checks.push({ name, pass, details });
+  console.log(`${pass ? 'PASS' : 'FAIL'} ${name}${details ? ': ' + details : ''}`);
+}
+if (!existsSync(pdf)) {
+  check('Input PDF exists', false, pdf);
+} else {
+  check('Input PDF exists', true);
+  try {
+    command('qpdf', ['--check', pdf]);
+    check('PDF structure (qpdf)', true);
+  } catch (error) { check('PDF structure (qpdf)', false, error.message); }
+
+  try {
+    const info = command('pdfinfo', [pdf]);
+    const pages = Number(info.match(/^Pages:\s*(\d+)/m)?.[1]);
+    check('Positive page count', Number.isInteger(pages) && pages > 0, String(pages || 'unknown'));
+    if (pages > 0) {
+      // Query one page at a time: pdfinfo's default summary concerns only page one.
+      const bad = [];
+      for (let p = 1; p <= pages; p++) {
+        const pageInfo = command('pdfinfo', ['-f', String(p), '-l', String(p), '-box', pdf]);
+        const match = pageInfo.match(new RegExp(`^Page\\s+${p}\\s+size:\\s*([\\d.]+)\\s+x\\s+([\\d.]+)\\s+pts`, 'm'));
+        if (!match || Math.abs(Number(match[1]) - expected.width) > 0.5 ||
+            Math.abs(Number(match[2]) - expected.height) > 0.5) bad.push(p);
+      }
+      check('Every page is portrait A5', bad.length === 0,
+        bad.length ? `Unexpected or unreadable dimensions on pages: ${bad.slice(0, 30).join(', ')}` : `${pages} pages`);
+    }
+  } catch (error) { check('Page geometry (pdfinfo)', false, error.message); }
+
+  try {
+    const lines = command('pdffonts', [pdf]).trim().split('\n').slice(2).filter(Boolean);
+    // pdffonts columns: name | type | encoding | emb | sub | uni | object ID.
+    const unembedded = lines.filter(line => !/\s+yes\s+(?:yes|no)\s+(?:yes|no)\s+\d+\s+\d+\s*$/i.test(line));
+    check('All listed fonts embedded', unembedded.length === 0,
+      `${lines.length} fonts; ${unembedded.length} non-embedded or unreadable entries`);
+  } catch (error) { check('Fonts (pdffonts)', false, error.message); }
+
+  try {
+    command('gs', ['-q', '-dBATCH', '-dNOPAUSE', '-sDEVICE=nullpage', pdf]);
+    check('Ghostscript renders all pages', true);
+  } catch (error) { check('Ghostscript renders all pages', false, error.message); }
+}
+
+const pending = [
+  'PDF/X-4 conformance and output intent must be validated in dedicated software',
+  'TrimBox/BleedBox, binding margins and print-safe placement',
+  'Color/grayscale and image effective resolution for the selected product',
+  'Visual inspection of code blocks, tables, diagrams, footnotes and page breaks',
+  'Physical proof and separate cover using Publit’s exact template'
 ];
-const md = [
+const lines = [
   '# Publit — preliminary preflight', '',
-  'Input: \x60' + pdf + '\x60', '',
-  'Generated: ' + new Date().toISOString(), '',
+  `Input: \`${pdf}\``, '',
+  `Generated: ${new Date().toISOString()}`, '',
+  `Result: **${checks.every(c => c.pass) ? 'AUTOMATED CHECKS PASSED' : 'AUTOMATED CHECKS FAILED'}** (not print approval)`, '',
   '## Automated checks', '',
-  ...checks.map(c => '- ' + (c.ok ? 'PASS' : '**FAIL**') + ' — ' + c.label + (c.detail ? ': ' + c.detail : '')),
-  '', '## Manual / specialist checks still required', '',
-  ...mustReview.map(s => '- [ ] ' + s), '',
-  '> These checks do NOT certify PDF/X-4 and do not authorize printing.', ''
-].join('\n');
-mkdirSync(resolve(report, '..'), { recursive: true });
-writeFileSync(report, md);
-console.log('Report: ' + report);
-if (checks.some(c => !c.ok)) process.exitCode = 1;
+  ...checks.map(c => `- ${c.pass ? 'PASS' : '**FAIL**'} — ${c.name}${c.details ? ': ' + c.details : ''}`),
+  '', '## Manual / specialist checks required', '',
+  ...pending.map(x => `- [ ] ${x}`), '',
+  '> Passing this report does not establish PDF/X-4 compliance or authorize printing.', ''
+];
+mkdirSync(dirname(report), { recursive: true });
+writeFileSync(report, lines.join('\n'));
+console.log('Preflight report:', report);
+if (checks.some(c => !c.pass)) process.exitCode = 1;
