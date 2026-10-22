@@ -40,7 +40,7 @@ export function preparePrint({ interiorOnly = false } = {}) {
       ...(interiorOnly ? [] : [readFileSync('publishing/print/author.md', 'utf8').split('<div class="author-card">')[0].trim()]),
       toc,
       '<section class="book-print-author"><span id="bok-forfattare"></span><div class="author-card">' + readFileSync('publishing/print/author.md','utf8').split('<div class="author-card">')[1].trim() + '</section>',
-      readFileSync('content/sv/forord.md', 'utf8').replace(/^---\n[\s\S]*?\n---\n/, '').replace(/<div class="book-foreword-marker"><\/div>/, '').replace(/\[Börja läsa – Kapitel 1\]\([^)]*\)/, '').trim().replace(/^# Förord/, '<h1 class="book-print-foreword" id="bok-forord">Förord</h1>'),
+      '<section class="book-print-foreword-section">\n' + readFileSync('content/sv/forord.md', 'utf8').replace(/^---\n[\s\S]*?\n---\n/, '').replace(/<div class="book-foreword-marker"><\/div>/, '').replace(/\[Börja läsa – Kapitel 1\]\([^)]*\)/, '').trim().replace(/^# Förord/, '<h1 class="book-print-foreword" id="bok-forord">Förord</h1>') + '\n</section>',
       ...items.map(item => chapterEndnotes(item.source, item.id).replace(/^# ([^\n]+)/, (_, title) => '<h1 id="kapitel-' + item.id + '">' + title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</h1>')),
       readFileSync('content/sv/bilaga-a-databasmodellering.md', 'utf8').trim()
         .replace(/^# ([^\n]+)/, (_, title) => '<h1 id="bok-bilaga-a">' + title.replace(/&/g, '&amp;') + '</h1>')
