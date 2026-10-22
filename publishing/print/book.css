@@ -192,3 +192,16 @@ img[src*="modell-a"] {
 /* Keep the contents on one leaf (not a two-page spread). */
 .book-print-toc ol { columns: 2; column-gap: 5mm; padding-left: 5mm; }
 .book-print-toc li { break-inside: avoid; font-size: 7.5pt; line-height: 1.18; margin-bottom: 1.4mm; }
+
+/* Typografiskt skydd i bägge PDF-utgåvorna. */
+p, li { orphans: 3; widows: 3; }
+h1, h2, h3, h4 { break-after: avoid-page; }
+pre, figure, tr { break-inside: avoid-page; }
+.book-foreword-closing { break-inside: avoid-page; }
+.book-foreword-closing p { margin-bottom: .5em; }
+.book-foreword-signature { break-before: avoid-page; margin-top: .8em; }
+
+/* Förordet hålls kompakt så att avslutningen ryms på en A5-sida. */
+.book-print-foreword-section { font-size: 9.5pt; line-height: 1.32; }
+.book-print-foreword-section p { margin-top: .55em; margin-bottom: .55em; }
+.book-print-foreword { margin-bottom: 5mm; }
