@@ -16,7 +16,7 @@ export function chapters() {
     });
 }
 
-export function preparePrint() {
+export function preparePrint({ interiorOnly = false } = {}) {
   const items = chapters();
   if (items.length !== 29) throw new Error('Förväntade 29 kapitel, fann ' + items.length);
   mkdirSync('dist/generated', { recursive: true });
@@ -33,9 +33,9 @@ export function preparePrint() {
     '</ol>',
     '</section>'
   ].join('\n');
-  writeFileSync('dist/generated/book-sv.md',
+  writeFileSync(interiorOnly ? 'dist/generated/book-sv-publit.md' : 'dist/generated/book-sv.md',
     [
-      readFileSync('publishing/print/author.md', 'utf8').split('<div class="author-card">')[0].trim(),
+      ...(interiorOnly ? [] : [readFileSync('publishing/print/author.md', 'utf8').split('<div class="author-card">')[0].trim()]),
       toc,
       '<section class="book-print-author"><span id="bok-forfattare"></span><div class="author-card">' + readFileSync('publishing/print/author.md','utf8').split('<div class="author-card">')[1].trim() + '</section>',
       readFileSync('content/sv/forord.md', 'utf8').replace(/^---\n[\s\S]*?\n---\n/, '').replace(/<div class="book-foreword-marker"><\/div>/, '').replace(/\[Börja läsa – Kapitel 1\]\([^)]*\)/, '').trim().replace(/^# Förord/, '<h1 class="book-print-foreword" id="bok-forord">Förord</h1>'),
