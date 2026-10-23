@@ -42,3 +42,15 @@ test('inlagans försidor har rätt ordning och numreringsstilar', () => {
   const css = readFileSync('publishing/print/book.css', 'utf8');
   assert.match(css, /@page :nth\(1 of foreword\)\s*\{\s*counter-reset:\s*page 0/);
 });
+
+test('innehållsförteckningen numrerar kapitel en gång och håller bilagor utanför', () => {
+  preparePrint({ interiorOnly: true });
+  const book = readFileSync('dist/generated/book-sv-publit.md', 'utf8');
+  const toc = book.split('</section>')[2] ?? book.slice(book.indexOf('class="book-print-toc"'), book.indexOf('class="book-print-author"'));
+  assert.match(toc, /<ol>[\s\S]*?href="#kapitel-01">Vad är en databas\?/);
+  assert.doesNotMatch(toc, /href="#bok-forord"/);
+  assert.match(toc, /<ul class="book-print-toc-appendices">/);
+  const web = readFileSync('content/sv/innehall.md', 'utf8');
+  assert.match(web, /1\. \[Vad är en databas\?\]/);
+  assert.doesNotMatch(web, /1\. \[1\. Vad är en databas\?/);
+});
