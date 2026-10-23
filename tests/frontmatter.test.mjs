@@ -40,10 +40,11 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
   const first = book.indexOf('id="kapitel-01"');
   const foreword = book.indexOf('id="bok-forord"');
   assert.ok(covers >= 0 && covers < toc && toc < author && author < foreword && foreword < first);
-  assert.ok(book.includes('href="#bok-forord"'));
+  assert.ok(book.includes('id="bok-forord"'));
   const tocHtml = book.slice(book.indexOf('class="book-print-toc"'),book.indexOf('</section>',book.indexOf('class="book-print-toc"')));
-  assert.ok(tocHtml.indexOf('href="#bok-forfattare"') < tocHtml.indexOf('href="#bok-forord"'));
-  assert.ok(tocHtml.indexOf('href="#bok-forord"') < tocHtml.indexOf('href="#kapitel-01"'));
+  assert.ok(!tocHtml.includes('href="#bok-forfattare"'));
+  assert.ok(!tocHtml.includes('href="#bok-forord"'));
+  assert.ok(tocHtml.includes('href="#kapitel-01"'));
   assert.ok(book.includes('Malmö, oktober 2026'));
   assert.ok(book.includes('research.ibm.com/publications/sequel-a-struciured-english-query-language'));
   for (let i = 1; i <= 29; i++) {
@@ -51,7 +52,7 @@ test('PDF har innehållsförteckning och stabila ankare', () => {
     assert.ok(book.includes('href="#'+id+'"'),id+' link');
     assert.ok(book.includes('id="'+id+'"'),id+' target');
   }
-  assert.ok(book.includes('href="#bok-forfattare"') && book.includes('id="bok-forfattare"'));
+  assert.ok(book.includes('id="bok-forfattare"'));
   assert.ok(book.includes('href="#bok-bilaga"') && book.includes('id="bok-bilaga"'));
   assert.ok(book.includes('href="#bok-referenser"') && book.includes('id="bok-referenser"'));
   assert.ok(book.indexOf('id="bok-bilaga"') < book.indexOf('id="bok-referenser"'));

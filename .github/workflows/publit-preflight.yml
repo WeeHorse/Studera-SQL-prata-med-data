@@ -1,0 +1,61 @@
+name: Publit print preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'publishing/**'
+      - 'content/**'
+      - 'tests/**'
+      - 'package*.json'
+      - '.github/workflows/publit-preflight.yml'
+  push:
+    branches:
+      - 'print/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install only missing PDF tools
+        shell: bash
+        run: |
+          missing=()
+          command -v gs >/dev/null || missing+=(ghostscript)
+          command -v pdfinfo >/dev/null || missing+=(poppler-utils)
+          command -v pdffonts >/dev/null || { [[ " ${missing[*]} " == *" poppler-utils "* ]] || missing+=(poppler-utils); }
+          command -v qpdf >/dev/null || missing+=(qpdf)
+          if (( ${#missing[@]} )); then
+            echo "Installing missing packages: ${missing[*]}"
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${missing[@]}"
+          else
+            echo "All PDF tools are already installed; skipping apt."
+          fi
+          gs --version
+          pdfinfo -v
+          qpdf --version
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build:publit
+      - name: Preliminary preflight
+        run: npm run validate:publit
+      - name: Upload review bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publit-print-review-${{ github.sha }}
+          path: |
+            dist/print/studera-sql-publit-inlaga-a5.pdf
+            dist/print/publit-preflight.md
+          if-no-files-found: warn
+          retention-days: 30

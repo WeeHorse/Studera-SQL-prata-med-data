@@ -27,6 +27,7 @@ jobs:
       - run: npm test
       - run: npm run build:web
       - run: npm run build:pdf
+      - run: npm run build:publit
       - name: Add A5 PDF to static site
         run: |
           test -s dist/print/studera-sql-sv-a5.pdf
@@ -40,6 +41,7 @@ jobs:
           path: |
             .vitepress/dist/
             dist/print/studera-sql-sv-a5.pdf
+            dist/print/studera-sql-publit-inlaga-a5.pdf
           include-hidden-files: true
           if-no-files-found: error
       - name: Upload Pages artifact
