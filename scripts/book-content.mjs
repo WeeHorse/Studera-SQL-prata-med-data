@@ -32,13 +32,13 @@ export function preparePrint({ interiorOnly = false } = {}) {
     '<section class="book-print-toc">',
     '<h1>Innehåll</h1>',
     '<ol>',
-    '<li><a href="#bok-forfattare">Om författaren</a></li>',
-    '<li><a href="#bok-forord">Förord</a></li>',
-    ...items.map(item => '<li><a href="#kapitel-' + item.id + '">' + item.title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a></li>'),
+    ...items.map(item => '<li><a href="#kapitel-' + item.id + '">' + item.title.replace(/^\d+\.\s*/, '').replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</a></li>'),
+    '</ol>',
+    '<ul class="book-print-toc-appendices">',
     '<li><a href="#bok-bilaga-a">Bilaga A – Att planera och modellera en databas</a></li>',
     '<li><a href="#bok-bilaga">Bilaga B – Exempeldatabasen</a></li>',
     '<li><a href="#bok-referenser">Referenser och vidare läsning</a></li>',
-    '</ol>',
+    '</ul>',
     '</section>'
   ].join('\n');
   const sections = [
