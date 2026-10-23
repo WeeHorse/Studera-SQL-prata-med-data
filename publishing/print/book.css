@@ -205,3 +205,23 @@ pre, figure, tr { break-inside: avoid-page; }
 .book-print-foreword-section { font-size: 9.5pt; line-height: 1.32; }
 .book-print-foreword-section p { margin-top: .55em; margin-bottom: .55em; }
 .book-print-foreword { margin-bottom: 5mm; }
+
+/* Vänsterställ tabellhuvuden och undvik avbrutna tabeller. */
+table { break-inside: avoid-page; }
+thead { display: table-header-group; }
+th { text-align: left; vertical-align: top; }
+tr { break-inside: avoid-page; }
+/* Förhindra att en undertitel följs av bara en enda rad brödtext. */
+h2, h3 { break-after: avoid-page; }
+h2 + p, h3 + p { orphans: 4; widows: 3; }
+/* Enspaltig innehållssida, 29 numrerade kapitel plus bilagor. */
+.book-print-toc { font-size: 8.6pt; line-height: 1.16; }
+.book-print-toc h1 { font-size: 17pt; line-height: 1.05; margin: 0 0 2.2mm; }
+.book-print-toc ol { columns: 1; padding-left: 6mm; margin: 0; }
+.book-print-toc li { font-size: 8.6pt; line-height: 1.14; margin: 0 0 .75mm; break-inside: avoid; }
+.book-print-toc-appendices { list-style: none; margin: 1mm 0 0; padding: 0; }
+.book-print-toc-appendices li { margin-bottom: .75mm; }
+/* Kortare notavsnitt, utan att texten går in i sidfoten. */
+.book-chapter-endnotes { margin-top: 3mm; }
+.book-chapter-endnotes + ol { font-size: 7.6pt; line-height: 1.2; }
+.book-chapter-endnotes + ol li { margin-bottom: .75mm; }
