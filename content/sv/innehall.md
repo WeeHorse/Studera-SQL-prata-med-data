@@ -9,6 +9,7 @@ sidebar: false
 
 - [Om författaren](/sv/forfattare.html)
 - [Förord](/sv/forord.html)
+
 1. [Vad är en databas?](/sv/chapters/01-vad-ar-en-databas.html)
 1. [Att förstå relationella data](/sv/chapters/02-att-forsta-relationella-data.html)
 1. [Att komma igång med SQL](/sv/chapters/03-att-komma-igang-med-sql.html)
