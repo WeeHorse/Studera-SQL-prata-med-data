@@ -25,3 +25,6 @@
   html { color: #111; background: #fff; }
   a { color: #111; }
 }
+
+/* Rektosida = udda fysisk sida; inför blank verso vid behov. */
+h1[id^="kapitel-"] { break-before: right; }
